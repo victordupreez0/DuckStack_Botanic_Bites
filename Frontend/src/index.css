@@ -1,14 +1,16 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+@apply font-sans;
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Raleway", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #efefef;
+  background-color: #000000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,16 +19,23 @@
 }
 
 body {
+  
+  font-family: "Raleway", sans-serif;
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column; /* ensures vertical stacking */
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
   min-width: 320px;
   min-height: 100vh;
+  text-align: center;      /* ensures text inside is centered */
 }
 
 h1 {
-  font-size: 3.2em;
+ font-size: 3.2em; /* fallback desktop */
   line-height: 1.1;
+  margin: 0 1rem;   /* horizontal padding so it doesn’t overflow */
+  word-break: break-word; /* ensures long text wraps */
 }
 
 button {
@@ -50,5 +59,11 @@ button {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 70px; /* your mobile display size */
   }
 }
