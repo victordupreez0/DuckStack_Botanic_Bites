@@ -3,6 +3,7 @@ import ProductCard from "../UI/productCard";
 import plantsBGpng from '../assets/plantsBG.png';
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const products = [
 	{
@@ -38,7 +39,7 @@ const products = [
 const FeaturedProducts = () => {
 	return (
         <><div className="mt-20">
-            <h1>Featured Products</h1>
+            <h2 className="text-black text-4xl md:text-5xl">Featured Products</h2>
         </div><div className="flex flex-wrap gap-6 mt-20 mb-20 justify-center">
                 {products.map(product => {
                     const { ref, inView } = useInView({
@@ -61,6 +62,13 @@ const FeaturedProducts = () => {
                         </motion.div>
                     );
                 })}
+                
+
+                <Link to="/shop">
+  <button className="btn bg-black border-none mt-10 focus:outline-none focus:ring-0">
+    Browse Products
+  </button>
+</Link>
             </div></>
 	);
 };

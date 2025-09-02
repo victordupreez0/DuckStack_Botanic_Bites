@@ -6,6 +6,8 @@ import LogIn from './Components/logIn'
 import SignUp from './Components/signUp'
 import Admin from './Components/AdminComponents/admin'
 import Home from './Components/home'
+import Shop from './Components/shop'
+import ScrollToTop from "./Components/scrollToTop";
 import { Routes, Route } from 'react-router-dom';
 import FeaturedProducts from './Components/featuredProducts'
 
@@ -27,13 +29,15 @@ function App() {
   }
 
   return (
-    <><div className="bg-[#343434] min-h-screen">
+    <><div className="min-h-screen">
         <Navbar />
+        <ScrollToTop /> 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/shop" element={<Shop />} />
       </Routes>
     </div>
 </>

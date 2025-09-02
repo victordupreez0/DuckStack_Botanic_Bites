@@ -5,16 +5,14 @@ import Flytrap from '../assets/flytrap.png'; // replace with your own image path
 const Header = () => {
   const user = JSON.parse(localStorage.getItem('user') || 'null');
   return (
-    <header
-      className="relative w-full flex flex-col items-center h-[95vh] bg-black bg-cover bg-center"
-    >
-      <BlurText
-        text="Botanic Bites"
-        delay={150}
-        animateBy="words"
-        direction="top"
-        className="text-[80px] font-bold md:text-[150px] text-center leading-[1.1] mt-20 z-10"
-      />
+    <header className="relative w-full flex flex-col items-center h-[55vh] md:h-[95vh] bg-black bg-cover bg-center">
+  <BlurText
+  text="Botanic Bites"
+  delay={150}
+  animateBy="words"
+  direction="top"
+  className=" text-[100px] font-bold md:text-[150px] leading-[1.1] mt-10 md:mt-20 z-10"
+/>
 
       {/* Venus flytrap image overlapping text */}
       <img

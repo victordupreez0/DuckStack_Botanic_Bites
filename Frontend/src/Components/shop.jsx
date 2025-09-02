@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import Header from './header'
+import ShopHeader from './shopHeader'
+
 import FeaturedProducts from './featuredProducts'
 
-function Home() {
+function Shop() {
   return (
     <div className="min-h-screen">
-      <Header />
-      <FeaturedProducts />
+    <ShopHeader />
     </div>
   )
 }
 
-export default Home
+export default Shop;
