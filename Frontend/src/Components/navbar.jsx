@@ -39,7 +39,7 @@ function Navbar() {
 
         {/* Right side - login link */}
         <div className="navbar-end flex-none">
-          <Link to="/logIn" className="btn btn-primary ml-2">Sign up</Link>
+          <Link to="/signUp" className="btn btn-primary ml-2">Sign up</Link>
         </div>
       </div>
     </nav>
