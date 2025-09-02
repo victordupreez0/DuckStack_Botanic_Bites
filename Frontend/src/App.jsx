@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Header from './Components/header'
 import Navbar from './Components/navbar'
-import LogIn from './Components/logIn'
+import LogIn from './Components/signUp'
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
