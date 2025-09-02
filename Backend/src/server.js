@@ -34,6 +34,10 @@ app.get('/', (req, res) => {
 
 // TODO: Add your routes here (import from routes folder)
 
+// Auth routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
