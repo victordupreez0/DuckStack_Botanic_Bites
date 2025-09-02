@@ -66,6 +66,8 @@ function LogIn() {
     title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
   />
 </label>
+
+<h2 className="mt-10">Already have an account <wrap className="font-bold">Log In</wrap></h2>
   </Step>
   <Step>
     <h6 className="text-2xl mb-5">Personalise</h6>
@@ -100,7 +102,7 @@ function LogIn() {
 
 <fieldset className="fieldset m-6 w-[100%] rounded-box">
   <label className="label">
-    <input type="checkbox" defaultChecked className="checkbox" />
+    <input type="checkbox" defaultUnChecked className="checkbox" />
     Apply to become a reseller
   </label>
 </fieldset>
