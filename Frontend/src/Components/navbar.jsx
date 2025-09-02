@@ -23,10 +23,13 @@ function Navbar() {
                 <Link to="/">Homepage</Link>
               </li>
               <li>
-                <Link to="/portfolio">Portfolio</Link>
+                <Link to="/care">Care Guides</Link>
               </li>
               <li>
                 <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/shop">Shop</Link>
               </li>
             </ul>
           </div>
