@@ -7,9 +7,9 @@ function LogIn() {
       <div className="relative bg-black min-h-screen w-full flex items-center justify-center">
         {/* Full screen background image with 80% opacity */}
         <img
-          src={"/src/assets/plantsBG.png"}
+          src={"/src/assets/plantsBG.jpeg"}
           alt="Background"
-          className="absolute inset-0 w-full h-full object-cover opacity-90 z-0"
+          className="absolute inset-0 w-full h-full object-cover opacity-50 z-0"
           style={{ pointerEvents: 'none' }}
         />
         <div className="relative z-10 w-full flex items-center justify-center">
