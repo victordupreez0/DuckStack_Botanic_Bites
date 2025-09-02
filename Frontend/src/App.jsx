@@ -5,6 +5,7 @@ import Navbar from './Components/navbar'
 import LogIn from './Components/logIn'
 import SignUp from './Components/signUp'
 import { Routes, Route } from 'react-router-dom';
+import FeaturedProducts from './Components/featuredProducts'
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -24,7 +25,7 @@ function App() {
   }
 
   return (
-    <div className="bg-[#343434] min-h-screen">
+    <><div className="bg-[#343434] min-h-screen">
       <Navbar />
       <Routes>
         <Route path="/" element={<Header />} />
@@ -32,6 +33,7 @@ function App() {
         <Route path="/login" element={<LogIn />} />
       </Routes>
     </div>
+    <FeaturedProducts /></>
   );
 }
 

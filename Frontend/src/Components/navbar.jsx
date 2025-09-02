@@ -39,8 +39,10 @@ function Navbar() {
 
         {/* Right side - login link */}
         <div className="navbar-end flex-none">
-          <Link to="/signUp" className="btn btn-primary ml-2">Sign up</Link>
+          <Link to="/login" className="btn btn-outline ml-2">Log in</Link>
+          <Link to="/signUp" className="btn bg-[#A07856] border-none focus:outline-none ml-2 focus:ring-0">Sign up</Link>
         </div>
+        
       </div>
     </nav>
   );
