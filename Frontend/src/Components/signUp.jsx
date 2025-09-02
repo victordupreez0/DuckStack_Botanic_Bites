@@ -3,14 +3,27 @@ import { useNavigate, Link } from 'react-router-dom';
 import Stepper, { Step } from './stepper';
 
 function SignUp() {
+  const profileImages = [
+    'https://i.guim.co.uk/img/media/b219034a3fd5933aa18ed7d0bcbc723d0c2d0846/0_611_3412_2047/master/3412.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=9e8d4463ae89981a4ca00e3b807d7421',
+    'https://www.shutterstock.com/image-photo/closeup-venus-flytrap-insectivorous-plants-600nw-2474016693.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2GWxiYfbHy1dUyKYy_k_bfTD7cg_2r777yw&s',
+    'https://platform.vox.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24724370/B88A7771.jpeg?quality=90&strip=all&crop=0.009170946441678,0,99.981658107117,100',
+    'https://www.thoughtco.com/thmb/9ToT07iB1NWHAZOnCobUbRFHAEk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/venus-fly-trap-2-533d86a86c014c3b84ab7cad363d94a1.jpg',
+    'https://images.squarespace-cdn.com/content/v1/54fbb611e4b0d7c1e151d22a/de308924-0a0e-4528-b559-c6b5d9cb61a5/Carnivorous-Pitcher-Plants-North-Carolina.jpg',
+    'https://allthatsinteresting.com/wordpress/wp-content/uploads/2013/12/carnivorous-plants-butterwort.jpg',
+    'https://cdn.mos.cms.futurecdn.net/WWSeFixpHqc5i5CaYD4T3m.jpg',
+    'https://www.allianceforthebay.org/wp-content/uploads/2020/10/carn-1.jpg'
+  ];
   const [form, setForm] = useState({
     name: '',
     surname: '',
     email: '',
     password: '',
     username: '',
-    reseller: false
+    reseller: false,
+    profileImg: profileImages[0]
   });
+  const [showImgGrid, setShowImgGrid] = useState(false);
   const [step, setStep] = useState(1);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -36,10 +49,10 @@ function SignUp() {
       setStep(3);
       if (res.ok) {
         setMessage('Signup successful!');
-        // Auto-login after signup
+        // Auto-login after signup with selected profile image
         localStorage.setItem('user', JSON.stringify({
           email: form.email,
-          profileImg: 'https://img.daisyui.com/images/profile/demo/batperson@192.webp'
+          profileImg: form.profileImg
         }));
         setTimeout(() => {
           navigate('/');
@@ -98,10 +111,32 @@ function SignUp() {
           </Step>
           <Step>
             <h6 className="text-2xl mb-5">Personalise</h6>
-            <div className="avatar">
-              <div className="w-24 rounded-full">
-                <img src="https://img.daisyui.com/images/profile/demo/batperson@192.webp" />
+            <div className="avatar flex flex-col items-center relative">
+              <div className="w-24 h-24 rounded-full mb-2 cursor-pointer border-4 border-[#A07856] flex items-center justify-center" onClick={() => setShowImgGrid(true)}>
+                <img src={form.profileImg} alt="Profile" className="w-24 h-24 rounded-full" />
               </div>
+              {showImgGrid && (
+                <div className="fixed inset-0 z-100 flex items-center justify-center" onClick={() => setShowImgGrid(false)}>
+                  <div
+                    className="bg-black bg-opacity-80 rounded-xl p-0 grid grid-cols-3 gap-0 shadow-2xl"
+                    style={{ width: '240px', height: '240px', position: 'fixed', top: '0', left: '0', transform: 'translate(-10%, -30%)', overflow: 'hidden' }}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {profileImages.map((img, i) => (
+                      <img
+                        key={i}
+                        src={img}
+                        alt={`Profile ${i+1}`}
+                        className="w-full h-full object-cover aspect-square cursor-pointer border-0 transition-transform duration-200 ease-out hover:-translate-y-2"
+                        onClick={() => {
+                          setForm(prev => ({ ...prev, profileImg: img }));
+                          setShowImgGrid(false);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <label className="input validator m-2">
               {/* ...svg... */}
