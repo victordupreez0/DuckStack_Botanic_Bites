@@ -65,7 +65,7 @@ function Navbar() {
         </div>
 
         {/* Center - logo */}
-        <div className="navbar-center w-10">
+        <div className="navbar-center w-10 md:mr-[-30px]">
           <img src={Logo} className="invert" alt="Logo" />
         </div>
 
