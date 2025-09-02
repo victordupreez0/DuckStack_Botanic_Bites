@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/logo.png';
 
 function Navbar() {
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user') || 'null'));
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setUser(JSON.parse(localStorage.getItem('user') || 'null'));
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  // Also update on navigation (in case localStorage is set in same tab)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setUser(JSON.parse(localStorage.getItem('user') || 'null'));
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <nav className="sticky top-0 z-50 bg-black bg-opacity-70 px-5">
       <div className="navbar justify-center shadow-sm">

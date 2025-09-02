@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Stepper, { Step } from './stepper';
-import { Link } from 'react-router-dom';
 
 function SignUp() {
   const [form, setForm] = useState({
@@ -13,6 +13,7 @@ function SignUp() {
   });
   const [step, setStep] = useState(1);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,6 +36,14 @@ function SignUp() {
       setStep(3);
       if (res.ok) {
         setMessage('Signup successful!');
+        // Auto-login after signup
+        localStorage.setItem('user', JSON.stringify({
+          email: form.email,
+          profileImg: 'https://img.daisyui.com/images/profile/demo/batperson@192.webp'
+        }));
+        setTimeout(() => {
+          navigate('/');
+        }, 500);
       } else {
         setMessage(data.message || 'Signup failed.');
       }
@@ -117,12 +126,10 @@ function SignUp() {
             </fieldset>
           </Step>
           <Step>
-            <h2 className={message ? "" : "invisible"} style={{ color: 'red', marginTop: '1em' }}>{message || 'Done!'}</h2>
+            <h2 className={message ? "" : "invisible"} style={{ color: 'white', marginTop: '1em', textAlign: 'center' }}>{message || 'Done!'}</h2>
           </Step>
         </Stepper>
-        {step === 3 && message && (
-          <div style={{ marginTop: '1em', color: 'white', textAlign: 'center' }}>{message}</div>
-        )}
+        {/* Message now only shown in last step, not outside Stepper */}
       </div>
     </div>
   );

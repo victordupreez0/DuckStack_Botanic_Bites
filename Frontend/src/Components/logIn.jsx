@@ -89,12 +89,10 @@ function LogIn() {
             <h2 className="mt-10">Don't have an account? <Link to="/SignUp" className="font-bold underline">Sign Up</Link></h2>
           </Step>
           <Step>
-            <h2 className={message ? "" : "invisible"} style={{ color: 'red', marginTop: '1em' }}>{message || 'Success!'}</h2>
+            <h2 className={message ? "" : "invisible"} style={{ color: 'white', marginTop: '1em', textAlign: 'center' }}>{message || 'Success!'}</h2>
           </Step>
         </Stepper>
-        {step === 2 && message && (
-          <div style={{ marginTop: '1em', color: 'white', textAlign: 'center' }}>{message}</div>
-        )}
+  {/* Message now only shown in last step, not outside Stepper */}
       </div>
     </div>
   );
