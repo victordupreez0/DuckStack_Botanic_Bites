@@ -19,7 +19,7 @@ const Header = () => {
       <img
         src={Flytrap}
         alt="Venus Flytrap"
-        className="w-[500px] md:w-[1080px] absolute bottom-0 transform translate-y-[0px] z-50 drop-shadow-[0_20px_30px_rgba(1,1,1,50)]"
+        className="w-[500px] md:w-[1080px] absolute bottom-0 transform translate-y-[0px] z-30 drop-shadow-[0_-20px_30px_rgba(1,1,1,50)]"
       />
     </header>
   );
