@@ -51,12 +51,12 @@ export default function Stepper({
   };
 
   return (
-    <div
-      className="flex min-h-full flex-1 flex-col items-center justify-center p-4 sm:aspect-[4/3] md:aspect-[2/1]"
+    <form
+      className="flex flex-1 flex-col items-center mt-16 p-4 sm:aspect-[4/3] md:aspect-[2/1]"
       {...rest}
     >
       <div
-  className={`mx-auto w-full max-w-md rounded-4xl bg-black shadow-xl text-white ${stepCircleContainerClassName}`}
+        className={`mx-auto w-full max-w-md rounded-4xl bg-black/50 backdrop-blur-lg shadow-xl text-white ${stepCircleContainerClassName}`}
         style={{ border: '1px solid #222' }}
       >
         <div className={`${stepContainerClassName} flex w-full items-center p-8`}>
@@ -103,6 +103,7 @@ export default function Stepper({
             <div className={`mt-10 flex ${currentStep !== 1 ? 'justify-between' : 'justify-end'}`}>
               {currentStep !== 1 && (
                 <button
+                  type="button"
                   onClick={handleBack}
                   className={`duration-350 rounded px-2 py-1 transition ${
                     currentStep === 1
@@ -115,6 +116,7 @@ export default function Stepper({
                 </button>
               )}
               <button
+                type="button"
                 onClick={isLastStep ? handleComplete : handleNext}
                 className="duration-350 flex items-center justify-center rounded-full bg-[#6F4D38] py-1.5 px-3.5 font-medium tracking-tight text-white transition hover:bg-[#3D211A] active:bg-green-700"
                 {...nextButtonProps}
@@ -125,7 +127,7 @@ export default function Stepper({
           </div>
         )}
       </div>
-    </div>
+    </form>
   );
 }
 

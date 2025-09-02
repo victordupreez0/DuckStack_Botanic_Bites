@@ -4,8 +4,16 @@ import Stepper, { Step } from './stepper';
 function LogIn() {
   const [name, setName] = useState('');
   return (
-    <div>
-      <Stepper
+      <div className="relative bg-black min-h-screen w-full flex items-center justify-center">
+        {/* Full screen background image with 80% opacity */}
+        <img
+          src={"/src/assets/plantsBG.png"}
+          alt="Background"
+          className="absolute inset-0 w-full h-full object-cover opacity-90 z-0"
+          style={{ pointerEvents: 'none' }}
+        />
+        <div className="relative z-10 w-full flex items-center justify-center">
+          <Stepper
   initialStep={1}
   onStepChange={(step) => {
     console.log(step);
@@ -102,6 +110,7 @@ function LogIn() {
   </Step>
  
 </Stepper>
+      </div>
     </div>
   );
 }
