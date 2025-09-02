@@ -31,12 +31,15 @@ function SignUp() {
         body: JSON.stringify(form),
       });
       const data = await res.json();
+      // Always stay on last step so message displays
+      setStep(3);
       if (res.ok) {
         setMessage('Signup successful!');
       } else {
         setMessage(data.message || 'Signup failed.');
       }
     } catch (err) {
+      setStep(3);
       setMessage('Network error.');
     }
   };
@@ -52,8 +55,11 @@ function SignUp() {
       <div className="relative z-10 w-full flex items-center justify-center">
         <Stepper
           initialStep={step}
-          onStepChange={setStep}
-          onFinalStepCompleted={handleFinalStep}
+          onStepChange={(newStep) => {
+            setStep(newStep);
+            if (newStep === 3) handleFinalStep();
+          }}
+          onFinalStepCompleted={() => {}}
           backButtonText="Previous"
           nextButtonText="Next"
         >
@@ -111,10 +117,12 @@ function SignUp() {
             </fieldset>
           </Step>
           <Step>
-            <h2>Done!</h2>
+            <h2 className={message ? "" : "invisible"} style={{ color: 'red', marginTop: '1em' }}>{message || 'Done!'}</h2>
           </Step>
         </Stepper>
-        {message && <div style={{ marginTop: '1em', color: 'red' }}>{message}</div>}
+        {step === 3 && message && (
+          <div style={{ marginTop: '1em', color: 'white', textAlign: 'center' }}>{message}</div>
+        )}
       </div>
     </div>
   );

@@ -19,13 +19,14 @@ app.options('*', cors());
 
 // MongoDB connection
 const ACCESS_STRING = process.env.ACCESS_STRING;
-// If the connection string does not specify a database, add it here
 const DB_NAME = 'Botanic-DB';
 let connectionString = ACCESS_STRING;
-if (!ACCESS_STRING.includes('/' + DB_NAME)) {
-  // Insert database name before query params
+// Fix: If the connection string does not already specify a database, add it (no leading slash)
+const regexDb = /mongodb(?:\+srv)?:\/\/[^\/]+\/(\w+)/;
+if (!regexDb.test(ACCESS_STRING)) {
+  // Insert database name before query params, without double slash
   const [base, params] = ACCESS_STRING.split('?');
-  connectionString = `${base}/${DB_NAME}?${params || ''}`;
+  connectionString = `${base}${DB_NAME ? '/' + DB_NAME : ''}${params ? '?' + params : ''}`;
 }
 
 mongoose.connect(connectionString)

@@ -3,6 +3,7 @@ import BlurText from '../UI/headerText';
 import Flytrap from '../assets/flytrap.png'; // replace with your own image path
 
 const Header = () => {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
   return (
     <header
       className="relative w-full flex flex-col items-center h-[95vh] bg-black bg-cover bg-center"

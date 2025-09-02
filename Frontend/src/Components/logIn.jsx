@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Stepper, { Step } from './stepper';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ function LogIn() {
   });
   const [step, setStep] = useState(1);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,12 +26,23 @@ function LogIn() {
         body: JSON.stringify(form),
       });
       const data = await res.json();
+      // Always stay on last step so message displays
+      setStep(2);
       if (res.ok) {
         setMessage('Login successful!');
+        localStorage.setItem('user', JSON.stringify({
+          email: form.email,
+          profileImg: 'https://img.daisyui.com/images/profile/demo/batperson@192.webp'
+        }));
+        setTimeout(() => {
+          navigate('/');
+          window.location.reload();
+        }, 500);
       } else {
         setMessage(data.message || 'Login failed.');
       }
     } catch (err) {
+      setStep(2);
       setMessage('Network error.');
     }
   };
@@ -45,8 +58,11 @@ function LogIn() {
       <div className="relative z-10 w-full flex items-center justify-center">
         <Stepper
           initialStep={step}
-          onStepChange={setStep}
-          onFinalStepCompleted={handleFinalStep}
+          onStepChange={(newStep) => {
+            setStep(newStep);
+            if (newStep === 2) handleFinalStep();
+          }}
+          onFinalStepCompleted={() => {}}
           backButtonText="Previous"
           nextButtonText="Next"
         >
@@ -73,10 +89,12 @@ function LogIn() {
             <h2 className="mt-10">Don't have an account? <Link to="/SignUp" className="font-bold underline">Sign Up</Link></h2>
           </Step>
           <Step>
-            <h2>Success!</h2>
+            <h2 className={message ? "" : "invisible"} style={{ color: 'red', marginTop: '1em' }}>{message || 'Success!'}</h2>
           </Step>
         </Stepper>
-        {message && <div style={{ marginTop: '1em', color: 'red' }}>{message}</div>}
+        {step === 2 && message && (
+          <div style={{ marginTop: '1em', color: 'white', textAlign: 'center' }}>{message}</div>
+        )}
       </div>
     </div>
   );
