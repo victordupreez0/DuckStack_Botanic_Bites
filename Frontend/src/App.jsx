@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import Header from './Components/header'
 import Navbar from './Components/navbar'
 import LogIn from './Components/logIn'
 import SignUp from './Components/signUp'
 import Admin from './Components/AdminComponents/admin'
 import Home from './Components/home'
+import ProductPage from './Components/productPage'
 import Shop from './Components/shop'
 import ScrollToTop from "./Components/scrollToTop";
 import { Routes, Route } from 'react-router-dom';
@@ -38,6 +38,7 @@ function App() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/shop" element={<Shop />} />
+         <Route path="/productPage" element={<ProductPage />} />
       </Routes>
     </div>
 </>

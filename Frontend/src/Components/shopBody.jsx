@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import ShopProductCard from '../UI/shopProductCard';
-import { useInView } from "react-intersection-observer";
+import { useNavigate } from 'react-router-dom';
 
 
 function FeaturedProducts() {
+  const navigate = useNavigate();
+
   const products = [
     {
       species: "Dionaea muscipula",
@@ -72,6 +74,7 @@ function FeaturedProducts() {
               description={product.description}
               price={product.price}
               stock={product.stock}
+              onClick={() => navigate('/productPage', { state: { product } })}
             />
           </motion.div>
         ))}
