@@ -2,7 +2,7 @@ import React from "react";
 
 const ProductCard = ({ title, image, description, price }) => {
   return (
-    <div className="card rounded-xl w-96 shadow-sm">
+    <div className="card rounded-lg w-96 shadow-sm">
       <figure>
         <img
           src={image}
