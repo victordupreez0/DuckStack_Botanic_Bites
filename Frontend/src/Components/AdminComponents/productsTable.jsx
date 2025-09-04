@@ -34,9 +34,28 @@ const ProductsTable = ({ products, onDelete }) => {
         <tbody>
           {products && products.length > 0 ? (
             products.map((product, idx) => (
-              <tr key={product._id || product.name}>
+              <tr key={product._id || product.name} className="hover">
                 <th>{idx + 1}</th>
-                <td>{product.name}</td>
+                <td className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded overflow-hidden bg-gray-100">
+                    {
+                      (() => {
+                        const src = product.images && product.images[0] ? product.images[0] : null;
+                        if (!src) return <img src={'/vite.svg'} alt={product.name} className="w-full h-full object-cover" />;
+                        if (typeof src === 'object') {
+                          const candidate = src.original || src.thumb || null;
+                          if (candidate) return <img src={(candidate.startsWith('/uploads') ? `http://localhost:3000${candidate}` : candidate)} alt={product.name} className="w-full h-full object-cover" />;
+                        }
+                        const s = String(src);
+                        if (s.startsWith('http://') || s.startsWith('https://')) return <img src={s} alt={product.name} className="w-full h-full object-cover" />;
+                        if (s.startsWith('/uploads')) return <img src={`http://localhost:3000${s}`} alt={product.name} className="w-full h-full object-cover" />;
+                        if (s.startsWith('uploads/')) return <img src={`http://localhost:3000/${s}`} alt={product.name} className="w-full h-full object-cover" />;
+                        return <img src={s} alt={product.name} className="w-full h-full object-cover" />;
+                      })()
+                    }
+                  </div>
+                  <span>{product.name}</span>
+                </td>
                 <td>{product.species || '-'}</td>
                 <td>R{product.price}</td>
                 <td>{product.stock ?? 0}</td>

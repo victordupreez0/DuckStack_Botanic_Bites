@@ -19,7 +19,7 @@ function ProductPage() {
         </button>
       </div>
  <div className="flex-1 flex justify-center items-center">
-   <ProductImageGallery images={product?.images || []}/>
+   <ProductImageGallery imagesProp={product?.images} />
    </div>
       
       <div className="flex-1 md:ml-20 pr-8 mb-4 md:mb-0">
@@ -28,7 +28,7 @@ function ProductPage() {
           
 
           <h2 className="text-5xl text-black mt-10 text-left font-bold">
-            {product?.name || "Product Title"}
+              {product?.name || product?.title || "Product Title"}
           </h2>
          
         </div>
@@ -38,7 +38,7 @@ function ProductPage() {
        
        <div className="mt-10">
         <p className="mt-2 text-black text-4xl text-left font-semibold">
-          Price: {product?.price || "R0"}
+          Price: R{product?.price ?? "0"}
         </p>
         <p className="mt-1 text-left text-black">Stock: {product?.stock || "N/A"}</p>
 

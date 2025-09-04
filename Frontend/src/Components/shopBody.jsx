@@ -34,10 +34,17 @@ function ShopBody() {
               species={product.species || ''}
               title={product.name || product.title}
               image={product.image}
+              images={product.images}
               description={product.description}
               price={product.price}
               stock={typeof product.stock === 'number' ? (product.stock > 0 ? 'In Stock' : 'Out of Stock') : 'Out of Stock'}
-              onClick={() => navigate('/productPage', { state: { product } })}
+              onClick={() => {
+                const p = { ...product };
+                if (!p.images || !p.images.length) {
+                  p.images = p.image ? [p.image] : [];
+                }
+                navigate('/productPage', { state: { product: p } });
+              }}
             />
           </motion.div>
         ))}

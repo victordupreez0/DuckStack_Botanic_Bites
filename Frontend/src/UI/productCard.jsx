@@ -1,11 +1,27 @@
 import React from "react";
 
-const ProductCard = ({ title, image, description, price, stock }) => {
+const ProductCard = ({ title, image, images, description, price, stock }) => {
+  const normalize = (src) => {
+    if (!src) return null;
+    // if it's an object with original/thumb fields
+    if (typeof src === 'object') {
+      if (src.original) return normalize(src.original);
+      if (src.thumb) return normalize(src.thumb);
+      return null;
+    }
+    let s = String(src).trim();
+    if (!s) return null;
+    if (s.startsWith('http://') || s.startsWith('https://')) return s;
+    if (s.startsWith('/uploads')) return `http://localhost:3000${s}`;
+    if (s.startsWith('uploads/')) return `http://localhost:3000/${s}`;
+    // other relative paths - try prefixing as fallback
+    return s;
+  };
   return (
     <div className="card rounded-lg w-96 shadow-sm">
       <figure>
         <img
-          src={image}
+          src={normalize(images && images[0] ? images[0] : image)}
           alt={title}
         />
       </figure>

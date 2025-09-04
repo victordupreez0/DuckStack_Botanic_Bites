@@ -57,6 +57,7 @@ const FeaturedProducts = () => {
 							<ProductCard
 								title={product.title}
 								image={product.image}
+								images={product.images}
 								description={product.description}
 								price={product.price}
 								stock={product.stock} />

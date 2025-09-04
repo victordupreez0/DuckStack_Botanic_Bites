@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Stepper, { Step } from './stepper';
 
@@ -66,6 +66,54 @@ function SignUp() {
     }
   };
 
+  useEffect(() => {
+    const renderGoogle = () => {
+      if (!window.google) return;
+      try {
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || window.__GOOGLE_CLIENT_ID__,
+          callback: async (response) => {
+            const id_token = response?.credential;
+            if (!id_token) return;
+            try {
+              const res = await fetch('http://localhost:3000/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_token })
+              });
+              const data = await res.json();
+              setStep(3);
+              if (res.ok && data.token) {
+                setMessage('Signup/Login successful!');
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify({ ...data.user, profileImg: data.user.profileImg || form.profileImg }));
+                setTimeout(() => { navigate('/'); }, 500);
+              } else {
+                setMessage(data.message || 'Google signup failed.');
+              }
+            } catch (err) {
+              setStep(3);
+              setMessage('Network error.');
+            }
+          }
+        });
+        const container = document.getElementById('googleSignUpDiv');
+        if (container) {
+          container.innerHTML = '';
+          window.google.accounts.id.renderButton(container, { theme: 'outline', size: 'large' });
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+    renderGoogle();
+    // If google script didn't load or init failed, show hint after 1.5s
+    const t = setTimeout(() => {
+      if (!window.google) setMessage('Google Sign-In not available (script not loaded or origin not authorized). Check OAuth origins.');
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [form.profileImg, navigate]);
+
   return (
     <div className="relative bg-black min-h-screen w-full flex items-center justify-center">
       <img
@@ -74,7 +122,7 @@ function SignUp() {
         className="absolute inset-0 w-full h-full object-cover opacity-50 z-0"
         style={{ pointerEvents: 'none' }}
       />
-      <div className="relative z-10 w-full flex items-center justify-center">
+  <div className="relative w-full flex flex-col items-center justify-center pb-40">
         <Stepper
           initialStep={step}
           onStepChange={(newStep) => {
@@ -107,7 +155,10 @@ function SignUp() {
                 title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
               />
             </label>
-            <h2 className="mt-10">Already have an account? <Link to="/logIn" className="font-bold underline">Log In</Link></h2>
+            <div className="mt-4 flex w-full">
+              <div id="googleSignUpDiv" className="m-auto"></div>
+            </div>
+            <h2 className="mt-6">Already have an account? <Link to="/logIn" className="font-bold underline">Log In</Link></h2>
           </Step>
           <Step>
             <h6 className="text-2xl mb-5">Personalise</h6>
@@ -163,7 +214,7 @@ function SignUp() {
           <Step>
             <h2 className={message ? "" : "invisible"} style={{ color: 'white', marginTop: '1em', textAlign: 'center' }}>{message || 'Done!'}</h2>
           </Step>
-        </Stepper>
+  </Stepper>
         {/* Message now only shown in last step, not outside Stepper */}
       </div>
     </div>

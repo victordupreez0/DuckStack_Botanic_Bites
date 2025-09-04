@@ -1,24 +1,18 @@
 
-
 const express = require('express');
 const productController = require('../controllers/productController');
 const auth = require('../middleware/auth');
 const isAdmin = require('../middleware/isAdmin');
+const router = express.Router();
+// multer for handling image uploads
 const multer = require('multer');
 const path = require('path');
-
-// Configure multer for up to 4 images
+const uploadDir = path.join(__dirname, '..', '..', 'uploads');
 const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, path.join(__dirname, '../../uploads/products'));
-	},
-	filename: function (req, file, cb) {
-		cb(null, Date.now() + '-' + file.originalname);
-	}
+	destination: (req, file, cb) => cb(null, uploadDir),
+	filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`),
 });
-const upload = multer({ storage: storage });
-
-const router = express.Router();
+const upload = multer({ storage, limits: { files: 4 } });
 // Increment stock for a product
 router.patch('/:id/stock', auth, isAdmin, productController.incrementStock);
 

@@ -1,6 +1,7 @@
 
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 
 const cors = require('cors'); // Added CORS
 const app = express();
@@ -8,6 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+// Serve uploaded files
+// Serve uploaded files from Backend/uploads
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
@@ -54,9 +58,10 @@ const adminRoutes = require('./routes/admin');
 app.use('/api/admin', auth, isAdmin, adminRoutes);
 
 // Catch-all for debugging unknown requests
-app.use((req, res, next) => {
+// Catch-all for debugging unknown requests — return 404 so requests don't hang
+app.use((req, res) => {
   console.log('Unhandled request:', req.method, req.originalUrl);
-  next();
+  res.status(404).send('Not found');
 });
 
 app.listen(PORT, () => {

@@ -63,18 +63,21 @@ async function getCollection() {
 
 exports.addProduct = async (req, res) => {
   try {
-    console.log('Add Product Request Body:', req.body, 'stock type:', typeof req.body.stock);
+    console.log('Add Product Request Body:', req.body, 'files:', req.files && req.files.length);
     const collection = await getCollection();
-    // Handle up to 4 uploaded images
+    // Build images array: prefer uploaded files, otherwise accept image URLs in body (image or images[])
     let images = [];
-    if (req.files && req.files.length > 0) {
-      images = req.files.map(file => '/uploads/products/' + file.filename);
+    if (req.files && req.files.length) {
+      const base = req.protocol + '://' + req.get('host');
+      images = req.files.map(f => `${base}/uploads/${f.filename}`);
     } else if (req.body.images) {
-      // fallback for direct URLs
-      images = Array.isArray(req.body.images) ? req.body.images : [req.body.images];
+      // Accept comma separated or array
+      if (Array.isArray(req.body.images)) images = req.body.images.filter(Boolean);
+      else images = String(req.body.images).split(',').map(s => s.trim()).filter(Boolean);
+    } else if (req.body.image) {
+      images = [req.body.image];
     }
-    // Ensure 4 images (fill with empty string if less)
-    while (images.length < 4) images.push('');
+
     const product = {
       name: req.body.name,
       species: req.body.species,
@@ -88,8 +91,8 @@ exports.addProduct = async (req, res) => {
     const result = await collection.insertOne(product);
     res.status(201).json({ _id: result.insertedId, ...product });
   } catch (err) {
-    console.error('Add product error:', err);
-    res.status(400).json({ error: err.message });
+  console.error('Add product error:', err);
+  res.status(400).json({ error: err.message });
   }
 };
 
@@ -118,19 +121,22 @@ exports.updateProduct = async (req, res) => {
     if (req.body.species !== undefined) update.species = req.body.species;
     if (req.body.price !== undefined) update.price = Number(req.body.price);
     if (req.body.description !== undefined) update.description = req.body.description;
-    if (req.body.category !== undefined) update.category = req.body.category;
-    if (req.body.stock !== undefined) update.stock = Number(req.body.stock);
-    // Handle images update
-    let images = [];
-    if (req.files && req.files.length > 0) {
-      images = req.files.map(file => '/uploads/products/' + file.filename);
-    } else if (req.body.images) {
-      images = Array.isArray(req.body.images) ? req.body.images : [req.body.images];
-    }
-    if (images.length > 0) {
-      while (images.length < 4) images.push('');
+    // images: handle uploaded files or provided URLs
+    if ((req.files && req.files.length) || req.body.images !== undefined || req.body.image !== undefined) {
+      let images = [];
+      if (req.files && req.files.length) {
+        const base = req.protocol + '://' + req.get('host');
+        images = req.files.map(f => `${base}/uploads/${f.filename}`);
+      } else if (req.body.images) {
+        if (Array.isArray(req.body.images)) images = req.body.images.filter(Boolean);
+        else images = String(req.body.images).split(',').map(s => s.trim()).filter(Boolean);
+      } else if (req.body.image) {
+        images = [req.body.image];
+      }
       update.images = images;
     }
+    if (req.body.category !== undefined) update.category = req.body.category;
+    if (req.body.stock !== undefined) update.stock = Number(req.body.stock);
     console.log('UpdateProduct called with id:', id);
     const queryId = ObjectId.isValid(id) ? new ObjectId(id) : id;
     const result = await collection.findOneAndUpdate(
