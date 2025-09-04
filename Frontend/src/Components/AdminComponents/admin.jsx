@@ -3,8 +3,8 @@ import React from "react";
 import Sidebar from "./sidebar";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./dashboard";
-import AddProductForm from "./AddProductForm";
-import AddStockForm from "./StocktakeForm";
+import AddProductButton from "./AddProductButton";
+import AddStockButton from "./AddStockButton";
 import ProductsTable from "./productsTable";
 import Orders from "./orders";
 import Users from "./users";
@@ -54,13 +54,16 @@ const ProductsPage = () => {
       alert('Network error: ' + err.message);
     }
   };
+  // ...existing code...
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Products</h2>
-      <AddProductForm onProductAdded={handleProductAdded} />
-  <AddStockForm products={products} onStockUpdated={async () => {
+      <h2 className="text-2xl text-left text-black font-bold mb-4">Products</h2>
+      <div className="justify-start flex">
+  <AddProductButton onProductAdded={handleProductAdded} />
+      <AddStockButton products={products} onStockUpdated={async () => {
         await fetchProducts();
       }} />
+      </div>
       <div className="mt-8">
         <ProductsTable products={products} onDelete={handleDeleteProduct} />
       </div>
@@ -69,7 +72,7 @@ const ProductsPage = () => {
 };
 
 const Admin = () => (
-  <div style={{ display: "flex", height: "95vh" }}>
+  <div style={{ display: "flex", height: "100vh" }}>
     <Sidebar />
     <main style={{ flex: 1, padding: "2rem" }}>
       <Routes>

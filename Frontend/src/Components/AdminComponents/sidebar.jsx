@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
 
 const Sidebar = () => (
-  <div className="sidebar bg-gray-900 text-white w-64 h-full flex flex-col">
+  <div className="sidebar bg-black text-white w-64 h-full flex flex-col">
     <div className="sidebar-header flex items-center justify-center h-20 border-b border-gray-700">
       <img src={logo} alt="Admin Logo" className="h-10 w-10 mr-2 invert" />
       <span className="text-xl font-bold">Admin Panel</span>
@@ -54,12 +54,7 @@ const Sidebar = () => (
       </ul>
     </nav>
     <div className="sidebar-footer p-4 border-t border-gray-700">
-      <button className="w-full flex items-center justify-center py-2 bg-red-600 hover:bg-red-700 rounded transition-colors gap-3">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-log-out-icon lucide-log-out">
-        <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        </svg>
-        Logout
-      </button>
+    <h6>Created by Duckstack</h6>
     </div>
   </div>
 );

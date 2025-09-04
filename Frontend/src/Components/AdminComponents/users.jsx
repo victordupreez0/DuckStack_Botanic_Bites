@@ -42,58 +42,56 @@ const Users = () => {
   }), [users]);
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Users</h2>
+    <div className="overflow-x-auto rounded-box bg-white p-4">
+      <h2 className="text-2xl font-bold mb-4  text-left text-black">Users</h2>
 
       <div className="flex gap-3 items-center mb-4">
         <div className="btn-group">
-          <button className={`btn ${filter === 'all' ? 'btn-primary' : ''}`} onClick={() => setFilter('all')}>All ({counts.all})</button>
-          <button className={`btn ${filter === 'admins' ? 'btn-primary' : ''}`} onClick={() => setFilter('admins')}>Admins ({counts.admins})</button>
-          <button className={`btn ${filter === 'resellers' ? 'btn-primary' : ''}`} onClick={() => setFilter('resellers')}>Resellers ({counts.resellers})</button>
+          <button className={`btn m-2 ${filter === 'all' ? 'btn-primary' : ''}`} onClick={() => setFilter('all')}>All ({counts.all})</button>
+          <button className={`btn m-2 ${filter === 'admins' ? 'btn-primary' : ''}`} onClick={() => setFilter('admins')}>Admins ({counts.admins})</button>
+          <button className={`btn m-2 ${filter === 'resellers' ? 'btn-primary' : ''}`} onClick={() => setFilter('resellers')}>Resellers ({counts.resellers})</button>
         </div>
         <button className="btn btn-outline ml-auto" onClick={fetchUsers}>Refresh</button>
       </div>
 
-      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-        <table className="table">
-          <thead>
+      <table className="table bg-white text-black">
+        <thead className="text-black">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Admin</th>
+            <th>Reseller</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
             <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Admin</th>
-              <th>Reseller</th>
+              <td colSpan={6} className="text-center text-gray-500 bg-white">Loading...</td>
             </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={6} className="text-center">Loading...</td>
+          ) : error ? (
+            <tr>
+              <td colSpan={6} className="text-center text-error bg-white">{error}</td>
+            </tr>
+          ) : filtered && filtered.length > 0 ? (
+            filtered.map((u, idx) => (
+              <tr key={u._id || u.email} className="hover:bg-gray-100">
+                <th>{idx + 1}</th>
+                <td>{(u.name || '') + (u.surname ? ' ' + u.surname : '') || '-'}</td>
+                <td>{u.username || '-'}</td>
+                <td>{u.email || '-'}</td>
+                <td>{u.isAdmin ? <span className="badge badge-success">Yes</span> : <span className="badge">No</span>}</td>
+                <td>{u.reseller ? <span className="badge badge-info">Yes</span> : <span className="badge">No</span>}</td>
               </tr>
-            ) : error ? (
-              <tr>
-                <td colSpan={6} className="text-center text-error">{error}</td>
-              </tr>
-            ) : filtered && filtered.length > 0 ? (
-              filtered.map((u, idx) => (
-                <tr key={u._id || u.email} className="hover">
-                  <th>{idx + 1}</th>
-                  <td>{(u.name || '') + (u.surname ? ' ' + u.surname : '') || '-'}</td>
-                  <td>{u.username || '-'}</td>
-                  <td>{u.email || '-'}</td>
-                  <td>{u.isAdmin ? <span className="badge badge-success">Yes</span> : <span className="badge">No</span>}</td>
-                  <td>{u.reseller ? <span className="badge badge-info">Yes</span> : <span className="badge">No</span>}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={6} className="text-center">No users found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={6} className="text-center text-gray-500 bg-white">No users found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

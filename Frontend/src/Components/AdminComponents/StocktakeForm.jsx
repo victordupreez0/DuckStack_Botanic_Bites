@@ -38,16 +38,16 @@ const AddStockForm = ({ products = [], onStockUpdated }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded bg-white shadow mt-6">
-      <h3 className="text-lg font-bold">Add Stock</h3>
-      <select value={productId} onChange={(e) => setProductId(e.target.value)} required className="input w-full">
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white mt-6">
+      <h3 className="text-lg font-bold text-black">Add Stock</h3>
+      <select value={productId} onChange={(e) => setProductId(e.target.value)} required className="input border border-black bg-white text-black w-full m-2">
         <option value="">Select product</option>
         {products.map((p) => (
           <option key={p._id} value={p._id}>{p.name}</option>
         ))}
       </select>
-      <input type="number" min="1" value={amount} onChange={(e) => setAmount(e.target.value)} className="input w-full" />
-      <button type="submit" disabled={loading} className="btn bg-black text-white">{loading ? 'Updating...' : 'Add Stock'}</button>
+      <input type="number" min="1" value={amount} onChange={(e) => setAmount(e.target.value)} className="input border border-black bg-white text-black w-full m-2" />
+      <button type="submit" disabled={loading} className="btn mt-5 bg-black text-white">{loading ? 'Updating...' : 'Add Stock'}</button>
       {error && <div className="text-red-500">{error}</div>}
     </form>
   );

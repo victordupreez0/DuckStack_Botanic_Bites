@@ -13,10 +13,10 @@ const AddProductForm = ({ onProductAdded }) => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'number' ? Number(value) : value
+      [name]: type === 'number' ? parseFloat(value) || '' : value
     }));
   };
 
@@ -66,19 +66,19 @@ const AddProductForm = ({ onProductAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded bg-white shadow">
-      <h3 className="text-lg font-bold">Add Product</h3>
-      <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input" />
-      <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input" />
-      <input name="price" value={form.price} onChange={handleChange} placeholder="Price" required className="input" />
-      <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="textarea" />
-      <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="input" />
-      <label className="block">
+    <form onSubmit={handleSubmit} className="flex flex-col space-y-4 p-4 max-w-md">
+      <h3 className="text-lg font-bold text-black w-full">Add Product</h3>
+      <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input border border-black bg-white text-black w-full m-2" />
+      <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input border border-black bg-white text-black w-full m-2" />
+      <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="Price" required className="input border border-black bg-white text-black w-full m-2" />
+      <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="textarea border border-black bg-white text-black w-full m-2" />
+      <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="input border border-black bg-white text-black w-full m-2" />
+      <label className="block w-full m-2">
         <span className="text-sm">Upload up to 4 images</span>
-        <input type="file" accept="image/*" multiple onChange={handleFilesChange} className="file-input file-input-bordered w-full mt-2" />
+        <input type="file" accept="image/*" multiple onChange={handleFilesChange} className="file-input border border-black bg-white text-black w-full mt-2" />
       </label>
       {files.length > 0 && (
-        <div className="flex gap-2">
+        <div className="flex gap-2 m-2">
           {files.map((f, i) => (
             <div key={i} className="w-20 h-20 overflow-hidden rounded bg-gray-100">
               <img src={URL.createObjectURL(f)} alt={f.name} className="w-full h-full object-cover" />
@@ -86,8 +86,8 @@ const AddProductForm = ({ onProductAdded }) => {
           ))}
         </div>
       )}
-      <button type="submit" disabled={loading} className="btn bg-black text-white">{loading ? "Adding..." : "Add Product"}</button>
-      {error && <div className="text-red-500">{error}</div>}
+      <button type="submit" disabled={loading} className="btn bg-black text-white m-2 w-full">{loading ? "Adding..." : "Add Product"}</button>
+      {error && <div className="text-red-500 m-2">{error}</div>}
     </form>
   );
 };
