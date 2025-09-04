@@ -11,6 +11,7 @@ import Cart from './Components/cart'
 import ScrollToTop from "./Components/scrollToTop";
 import { Routes, Route } from 'react-router-dom';
 import FeaturedProducts from './Components/featuredProducts'
+import Footer from './Components/footer'
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -33,6 +34,7 @@ function App() {
     <><div className="min-h-screen">
         <Navbar />
         <ScrollToTop /> 
+       
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
@@ -46,6 +48,8 @@ function App() {
          <Route path="/productPage" element={<ProductPage />} />
            <Route path="/cart" element={<Cart />} />
       </Routes>
+       <Footer />
+      
     </div>
 </>
   );
