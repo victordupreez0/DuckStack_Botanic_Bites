@@ -7,6 +7,7 @@ import Admin from './Components/AdminComponents/admin'
 import Home from './Components/home'
 import ProductPage from './Components/productPage'
 import Shop from './Components/shop'
+import Cart from './Components/cart'
 import ScrollToTop from "./Components/scrollToTop";
 import { Routes, Route } from 'react-router-dom';
 import FeaturedProducts from './Components/featuredProducts'
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/shop" element={<Shop />} />
          <Route path="/productPage" element={<ProductPage />} />
+           <Route path="/cart" element={<Cart />} />
       </Routes>
     </div>
 </>
