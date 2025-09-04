@@ -38,7 +38,7 @@ const products = [
 
 const FeaturedProducts = () => {
 	return (
-        <><div className="mt-20">
+        <><div className="my-20">
             <h2 className="text-black text-4xl md:text-5xl">Featured Products</h2>
         </div><div className="flex flex-wrap gap-6 mt-20 mb-20 justify-center">
                 {products.map(product => {
@@ -64,12 +64,14 @@ const FeaturedProducts = () => {
                 })}
                 
 
+            
+            </div>
                 <Link to="/shop">
-  <button className="btn bg-black border-none mt-10 focus:outline-none focus:ring-0">
-    Browse Products
-  </button>
-</Link>
-            </div></>
+                <button className="btn bg-black mb-20 border-none focus:outline-none focus:ring-0">
+                    Browse Products
+                </button>
+                </Link>
+</>
 	);
 };
 
