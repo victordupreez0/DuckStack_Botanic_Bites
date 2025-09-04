@@ -24,7 +24,7 @@ function CartSummary() {
                             <p className="text-black text-lg font-semibold">Shipping</p>
                             <span className="ml-auto flex items-center gap-2 text-lg text-black ">
                                 To be calculated
-                                <span className="tooltip tooltip-top" data-tip="Shipping is calculated at checkout with Courier Guy.">
+                                <span className="tooltip tooltip-left md:tooltip-top" data-tip="Shipping is calculated at checkout with Courier Guy.">
                                     <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-black font-bold cursor-pointer">?</span>
                                 </span>
                             </span>
