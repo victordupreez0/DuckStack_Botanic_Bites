@@ -25,8 +25,8 @@ const ProductCard = ({ title, image, images, description, price, stock }) => {
           alt={title}
         />
       </figure>
-      <div className="card-body rounded-bl-xl rounded-br-xl text-black">
-        <h2 className="card-title">{title}</h2>
+      <div className="card-body rounded-bl-xlrounded-br-xl text-black">
+        <h2 className="card-title ">{title}</h2>
         <p className="text-left">{description}</p>
         {typeof stock === 'number' && stock > 0 && (
           <span className="text-green-600 font-semibold">In Stock</span>

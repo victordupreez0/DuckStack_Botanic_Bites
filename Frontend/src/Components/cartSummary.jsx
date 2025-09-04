@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 function CartSummary() {
     const [quantity, setQuantity] = useState(1);
@@ -33,6 +34,7 @@ function CartSummary() {
             </div>
 
             <div className="btn mt-10 w-full hover:bg-[#6F4D38]">Checkout</div>
+            <Link to='/shop' className="btn mt-2 w-full bg-white text-black hover:bg-gray-100">Continue Shopping</Link>
 
         </div>
     );

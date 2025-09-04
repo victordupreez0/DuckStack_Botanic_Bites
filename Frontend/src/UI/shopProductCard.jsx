@@ -22,7 +22,7 @@ const ShopProductCard = ({ species, title, image, images, description, price, st
       <div className="flex items-center px-6 py-3 bg-black">
         <h2 className="text-sm font-light text-white">{species}</h2>
       </div>
-      <div className="py-4">
+      <div className="py-4 text-left ml-5">
         <h2 className="text-lg font-semibold text-gray-800 text-black">{title}</h2>
         <p className="py-2 text-gray-700 dark:text-gray-400">{description}</p>
         <h2 className="text-xl font-bold text-black">{price}</h2>

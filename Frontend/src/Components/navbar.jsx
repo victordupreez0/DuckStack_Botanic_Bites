@@ -47,18 +47,18 @@ function Navbar() {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+              className="menu menu-sm dropdown-content ml-[-28px] md:ml-[0px] bg-black z-1 my-3  w-[50vw] h-[100vh] md:h-fit md:w-52 p-2 shadow">
               <li>
-                <Link to="/">Homepage</Link>
+                <Link className="text-3xl md:text-xl mt-5" to="/">Homepage</Link>
               </li>
               <li>
-                <Link to="/care">Care Guides</Link>
+                <Link className="text-3xl md:text-xl mt-5" to="/care">Care Guides</Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
+                <Link className="text-3xl md:text-xl mt-5" to="/about">About</Link>
               </li>
               <li>
-                <Link to="/shop">Shop</Link>
+                <Link className="text-3xl md:text-xl mt-5" to="/shop">Shop</Link>
               </li>
             </ul>
           </div>
@@ -75,7 +75,7 @@ function Navbar() {
             <div className="flex items-center gap-4">
               {/* Admin button for admins only */}
               {user.isAdmin && (
-                <Link to="/admin" className="btn btn-warning">Admin</Link>
+                <Link to="/admin" className="btn">Admin</Link>
               )}
               {/* Cart icon */}
           <Link to="/cart">

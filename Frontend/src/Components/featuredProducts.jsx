@@ -1,5 +1,5 @@
 import React from "react";
-import ProductCard from "../UI/productCard";
+import ShopProductCard from "../UI/shopProductCard";
 import plantsBGpng from '../assets/plantsBG.png';
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
@@ -9,6 +9,7 @@ const products = [
 	{
 		id: 1,
 		title: "Venus Flytrap",
+        species: "Species",
 		image: plantsBGpng,
 		description: "Description",
 		price: "R150"
@@ -16,6 +17,7 @@ const products = [
 	{
 		id: 2,
 		title: "Sundew",
+        species: "Species",
 		image: plantsBGpng,
 		description: "Description",
 		price: "R150"
@@ -23,6 +25,7 @@ const products = [
 	{
 		id: 3,
 		title: "Pitcher Plant",
+        species: "Species",
 		image: plantsBGpng,
 		description: "Description",
 		price: "R150"
@@ -30,6 +33,7 @@ const products = [
 	{
 		id: 4,
 		title: "Butterwort",
+        species: "Species",
 		image: plantsBGpng,
 		description: "Description",
 		price: "R150"
@@ -54,8 +58,9 @@ const FeaturedProducts = () => {
                             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
                         >
-							<ProductCard
+							<ShopProductCard
 								title={product.title}
+                                species={product.species}
 								image={product.image}
 								images={product.images}
 								description={product.description}
