@@ -30,8 +30,10 @@ function LogIn() {
       setStep(2);
       if (res.ok) {
         setMessage('Login successful!');
+        // Save the user object from backend, including isAdmin
+        localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify({
-          email: form.email,
+          ...data.user,
           profileImg: 'https://img.daisyui.com/images/profile/demo/batperson@192.webp'
         }));
         setTimeout(() => {

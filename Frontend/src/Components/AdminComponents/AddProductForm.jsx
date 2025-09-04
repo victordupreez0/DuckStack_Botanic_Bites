@@ -6,19 +6,26 @@ const AddProductForm = ({ onProductAdded }) => {
     species: "",
     price: "",
     description: "",
-    image: "",
     category: "",
-    inStock: true
   });
+  const [images, setImages] = useState([null, null, null, null]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === 'number' ? Number(value) : value
     }));
+  };
+
+  const handleImageChange = (idx, file) => {
+    setImages(prev => {
+      const updated = [...prev];
+      updated[idx] = file;
+      return updated;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -26,10 +33,20 @@ const AddProductForm = ({ onProductAdded }) => {
     setLoading(true);
     setError("");
     try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      images.forEach((img, idx) => {
+        if (img) formData.append('images', img);
+      });
       const res = await fetch("http://localhost:3000/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: formData
       });
       let result;
       try {
@@ -40,8 +57,9 @@ const AddProductForm = ({ onProductAdded }) => {
       if (!res.ok) {
         throw new Error(result.error || 'Failed to add product');
       }
-  onProductAdded(result);
-  setForm({ name: "", species: "", price: "", description: "", image: "", category: "", inStock: true });
+      onProductAdded(result);
+      setForm({ name: "", species: "", price: "", description: "", category: "" });
+      setImages([null, null, null, null]);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -50,17 +68,25 @@ const AddProductForm = ({ onProductAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded bg-white shadow">
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded bg-white shadow" encType="multipart/form-data">
       <h3 className="text-lg font-bold">Add Product</h3>
-  <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input" />
-  <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input" />
+      <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input" />
+      <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input" />
       <input name="price" value={form.price} onChange={handleChange} placeholder="Price" required className="input" />
       <input name="description" value={form.description} onChange={handleChange} placeholder="Description" className="input" />
-      <input name="image" value={form.image} onChange={handleChange} placeholder="Image URL" className="input" />
       <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="input" />
-      <label>
-        <input type="checkbox" name="inStock" checked={form.inStock} onChange={handleChange} /> In Stock
-      </label>
+      <div className="flex flex-col gap-2">
+        <label className="font-semibold">Product Images (up to 4):</label>
+        {[0,1,2,3].map(idx => (
+          <input
+            key={idx}
+            type="file"
+            accept="image/*"
+            onChange={e => handleImageChange(idx, e.target.files[0])}
+            className="input"
+          />
+        ))}
+      </div>
       <button type="submit" disabled={loading} className="btn bg-black text-white">{loading ? "Adding..." : "Add Product"}</button>
       {error && <div className="text-red-500">{error}</div>}
     </form>

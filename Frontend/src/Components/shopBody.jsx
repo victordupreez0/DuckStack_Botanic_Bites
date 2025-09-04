@@ -36,7 +36,7 @@ function ShopBody() {
               image={product.image}
               description={product.description}
               price={product.price}
-              stock={product.inStock ? 'In Stock' : 'Out of Stock'}
+              stock={typeof product.stock === 'number' ? (product.stock > 0 ? 'In Stock' : 'Out of Stock') : 'Out of Stock'}
               onClick={() => navigate('/productPage', { state: { product } })}
             />
           </motion.div>

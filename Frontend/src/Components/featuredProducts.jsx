@@ -54,11 +54,12 @@ const FeaturedProducts = () => {
                             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
                         >
-                            <ProductCard
-                                title={product.title}
-                                image={product.image}
-                                description={product.description}
-                                price={product.price} />
+							<ProductCard
+								title={product.title}
+								image={product.image}
+								description={product.description}
+								price={product.price}
+								stock={product.stock} />
                         </motion.div>
                     );
                 })}

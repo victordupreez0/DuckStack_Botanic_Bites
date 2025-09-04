@@ -39,7 +39,7 @@ const ProductsTable = ({ products, onDelete }) => {
                 <td>{product.name}</td>
                 <td>{product.species || '-'}</td>
                 <td>R{product.price}</td>
-                <td>1</td>
+                <td>{product.stock ?? 0}</td>
                 <td>
                   <button
                     className="btn btn-error btn-xs"

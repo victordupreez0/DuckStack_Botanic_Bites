@@ -19,8 +19,8 @@ function ProductPage() {
         </button>
       </div>
  <div className="flex-1 flex justify-center items-center">
-      <ProductImageGallery/>
-      </div>
+   <ProductImageGallery images={product?.images || []}/>
+   </div>
       
       <div className="flex-1 md:ml-20 pr-8 mb-4 md:mb-0">
         
@@ -28,7 +28,7 @@ function ProductPage() {
           
 
           <h2 className="text-5xl text-black mt-10 text-left font-bold">
-            {product?.title || "Product Title"}
+            {product?.name || "Product Title"}
           </h2>
          
         </div>

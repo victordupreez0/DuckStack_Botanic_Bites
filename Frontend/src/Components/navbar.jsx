@@ -73,6 +73,10 @@ function Navbar() {
         <div className="navbar-end flex-none">
           {user ? (
             <div className="flex items-center gap-4">
+              {/* Admin button for admins only */}
+              {user.isAdmin && (
+                <Link to="/admin" className="btn btn-warning">Admin</Link>
+              )}
               {/* Cart icon */}
           <Link to="/cart">
   <svg

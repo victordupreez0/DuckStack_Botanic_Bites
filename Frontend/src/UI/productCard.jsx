@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProductCard = ({ title, image, description, price }) => {
+const ProductCard = ({ title, image, description, price, stock }) => {
   return (
     <div className="card rounded-lg w-96 shadow-sm">
       <figure>
@@ -12,11 +12,14 @@ const ProductCard = ({ title, image, description, price }) => {
       <div className="card-body rounded-bl-xl rounded-br-xl text-black">
         <h2 className="card-title">{title}</h2>
         <p className="text-left">{description}</p>
+        {typeof stock === 'number' && stock > 0 && (
+          <span className="text-green-600 font-semibold">In Stock</span>
+        )}
         <div className="card-actions justify-between items-center">
           <span className="font-bold text-lg">{price}</span>
           <button className="btn bg-black text-white border-none focus:outline-none focus:ring-0">
-  Buy Now
-</button>
+            Buy Now
+          </button>
         </div>
       </div>
     </div>
