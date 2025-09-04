@@ -50,6 +50,12 @@ app.use('/api/auth', authRoutes);
 const productRoutes = require('./routes/product');
 app.use('/api/products', productRoutes);
 
+// Catch-all for debugging unknown requests
+app.use((req, res, next) => {
+  console.log('Unhandled request:', req.method, req.originalUrl);
+  next();
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

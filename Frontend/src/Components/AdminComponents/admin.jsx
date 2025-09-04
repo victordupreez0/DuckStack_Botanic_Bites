@@ -3,7 +3,7 @@ import React from "react";
 import Sidebar from "./sidebar";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./dashboard";
-import AddProductForm from "./addProductForm";
+import AddProductForm from "./AddProductForm";
 import ProductsTable from "./productsTable";
 import Orders from "./orders";
 import Users from "./users";
@@ -19,12 +19,36 @@ const ProductsPage = () => {
   };
   React.useEffect(() => { fetchProducts(); }, []);
   const handleProductAdded = (product) => { setProducts((prev) => [...prev, product]); };
+  const handleDeleteProduct = async (product) => {
+    if (!product._id) return;
+    try {
+      // Always use correct backend port
+      const apiUrl = `http://localhost:3000/api/products/${product._id}`;
+      const res = await fetch(apiUrl, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        await fetchProducts();
+      } else {
+        let errorText = await res.text();
+        let errorMsg = 'Unknown error';
+        try {
+          errorMsg = JSON.parse(errorText).error || errorText;
+        } catch {
+          errorMsg = errorText || 'Unknown error';
+        }
+        alert('Failed to delete product: ' + errorMsg);
+      }
+    } catch (err) {
+      alert('Network error: ' + err.message);
+    }
+  };
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Products</h2>
       <AddProductForm onProductAdded={handleProductAdded} />
       <div className="mt-8">
-        <ProductsTable products={products} />
+        <ProductsTable products={products} onDelete={handleDeleteProduct} />
       </div>
     </div>
   );
