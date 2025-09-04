@@ -41,11 +41,14 @@ app.get('/', (req, res) => {
   res.send('Server is running and connected to MongoDB!');
 });
 
-// TODO: Add your routes here (import from routes folder)
 
 // Auth routes
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+
+// Product routes
+const productRoutes = require('./routes/product');
+app.use('/api/products', productRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
