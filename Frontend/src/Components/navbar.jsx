@@ -113,6 +113,10 @@ function Navbar() {
                       }}
                     >Logout</button>
                   </li>
+                  <li>
+                    <button
+                    >Account</button>
+                  </li>
                 </ul>
               </div>
             </div>

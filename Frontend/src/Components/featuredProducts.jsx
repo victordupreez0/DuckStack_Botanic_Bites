@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
 	return (
         <><div className="my-20">
             <h2 className="text-black text-4xl md:text-5xl">Featured Products</h2>
-	</div><div className="mb-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-7xl gap-8 mx-auto justify-items-center">
+	</div><div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-7xl gap-8 mx-auto justify-items-center">
                 {products.map(product => {
                     const { ref, inView } = useInView({
                         triggerOnce: true,
@@ -74,7 +74,7 @@ const FeaturedProducts = () => {
             
             </div>
                 <Link to="/shop">
-                <button className="btn bg-black mb-20 text-white border-none focus:outline-none focus:ring-0">
+                <button className="btn bg-black mb-10 text-white border-none focus:outline-none focus:ring-0">
                     Browse Products
                 </button>
                 </Link>

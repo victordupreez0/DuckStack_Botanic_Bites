@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiExternalLink } from "react-icons/fi";
 import ProductImageGallery from '../UI/productImageGallery'
+import { Link } from 'react-router-dom';
 
 function ProductPage() {
   const location = useLocation();
@@ -44,10 +45,10 @@ function ProductPage() {
 
        <div className="flex mt-5 justify-start gap-2">
          <button className="btn text-white">Add To Cart</button>
-         <button className="btn btn-outline border-black text-black hover:bg-gray-200 hover:text-black flex items-center">
+         <Link to='/care' className="btn btn-outline border-black text-black hover:bg-gray-200 hover:text-black flex items-center">
            <FiExternalLink className="mr-2" />
            Care Guide
-         </button>
+         </Link>
        </div>
         </div>
         
