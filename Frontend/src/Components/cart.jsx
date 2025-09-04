@@ -6,7 +6,7 @@ function Cart() {
     return (
         <>
         <CartHeader />
-            <div className="flex flex-col items-center mt-10 space-y-4">
+            <div className="flex flex-col items-center mt-10 mb-20 space-y-4">
                 <CartProduct />
                 <CartProduct />
                 <CartProduct />

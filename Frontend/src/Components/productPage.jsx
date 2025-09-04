@@ -13,12 +13,12 @@ function ProductPage() {
       <div className="absolute top-4 left-4">
         <button
           onClick={() => navigate(-1)}
-          className="text-black hover:text-gray-900 font-semibold"
+          className="text-black hover:text-gray-900 font-semibold mb-4 md:mb-0"
         >
           <FiArrowLeft size={30} />
         </button>
       </div>
- <div className="flex-1 flex justify-center items-center">
+ <div className="flex-1 flex justify-center items-center mt-5">
    <ProductImageGallery imagesProp={product?.images} />
    </div>
       

@@ -21,7 +21,7 @@ function ShopBody() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
+    <div className="flex justify-center  min-h-screen p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-7xl gap-8">
         {products.map((product) => (
           <motion.div
@@ -36,7 +36,7 @@ function ShopBody() {
               image={product.image}
               images={product.images}
               description={product.description}
-              price={product.price}
+              price={`R${product.price}`}
               stock={typeof product.stock === 'number' ? (product.stock > 0 ? 'In Stock' : 'Out of Stock') : 'Out of Stock'}
               onClick={() => {
                 const p = { ...product };
