@@ -67,7 +67,7 @@ const FeaturedProducts = () => {
             
             </div>
                 <Link to="/shop">
-                <button className="btn bg-black mb-20 border-none focus:outline-none focus:ring-0">
+                <button className="btn bg-black mb-20 text-white border-none focus:outline-none focus:ring-0">
                     Browse Products
                 </button>
                 </Link>
