@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
 	return (
         <><div className="my-20">
             <h2 className="text-black text-4xl md:text-5xl">Featured Products</h2>
-        </div><div className="flex flex-wrap gap-6 mt-20 mb-20 justify-center">
+	</div><div className="mb-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-7xl gap-8 mx-auto justify-items-center">
                 {products.map(product => {
                     const { ref, inView } = useInView({
                         triggerOnce: true,
