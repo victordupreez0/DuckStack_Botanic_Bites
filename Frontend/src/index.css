@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-@apply font-sans;
 
 :root {
   font-family: "Raleway", sans-serif;
@@ -17,7 +16,7 @@
 }
 
 body {
-  background-color: #ececec;
+  background-color: #fefefe;
   font-family: "Raleway", sans-serif;
   margin: 0;
   display: flex;
