@@ -26,6 +26,28 @@ const AddStockForm = ({ products = [], onStockUpdated }) => {
         return;
       }
       setError(''); // Clear error if update succeeds
+      // Record history entry locally so the admin History page can display it
+      try {
+        const rawUser = localStorage.getItem('user');
+        const userObj = rawUser ? JSON.parse(rawUser) : null;
+        const userName = userObj?.name || userObj?.email || 'Unknown';
+        const prod = products.find(p => String(p._id) === String(productId)) || null;
+        const entry = {
+          productId: productId,
+          productName: prod?.name || productId,
+          user: userName,
+          amount: Number(amount),
+          date: new Date().toISOString()
+        };
+        const existing = JSON.parse(localStorage.getItem('stockHistory') || '[]');
+        existing.unshift(entry);
+        localStorage.setItem('stockHistory', JSON.stringify(existing));
+        // notify other parts of the app
+        try { window.dispatchEvent(new CustomEvent('admin:historyUpdated', { detail: entry })); } catch(e){}
+      } catch (e) {
+        // non-fatal
+        console.warn('Failed to record stock history', e);
+      }
       // Always refresh product list for live table
       if (onStockUpdated) await onStockUpdated();
       setProductId('');

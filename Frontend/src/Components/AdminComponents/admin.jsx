@@ -1,8 +1,9 @@
 
 import React from "react";
 import Sidebar from "./sidebar";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Dashboard from "./dashboard";
+import History from "./history";
 import AddProductButton from "./AddProductButton";
 import AddStockButton from "./AddStockButton";
 import ProductsTable from "./productsTable";
@@ -10,6 +11,7 @@ import Orders from "./orders";
 import Users from "./users";
 
 const ProductsPage = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = React.useState([]);
   const fetchProducts = async () => {
     try {
@@ -73,6 +75,12 @@ const ProductsPage = () => {
       <AddStockButton products={products} onStockUpdated={async () => {
         await fetchProducts();
       }} />
+      <button
+        className="btn bg-black text-white m-2"
+        onClick={() => navigate('history')}
+      >
+        History
+      </button>
       </div>
       <div className="mt-8">
         <ProductsTable products={products} onDelete={handleDeleteProduct} />
@@ -87,7 +95,8 @@ const Admin = () => (
     <main style={{ flex: 1, padding: "2rem" }}>
       <Routes>
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="products" element={<ProductsPage />} />
+  <Route path="products" element={<ProductsPage />} />
+  <Route path="products/history" element={<History />} />
         <Route path="orders" element={<Orders />} />
         <Route path="users" element={<Users />} />
         <Route path="*" element={<Navigate to="dashboard" replace />} />
