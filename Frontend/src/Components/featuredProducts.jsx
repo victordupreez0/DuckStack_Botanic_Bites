@@ -86,7 +86,14 @@ const FeaturedProducts = () => {
 									})(dealProduct.description)}</p>
 									<div className="flex items-center justify-between">
 										<div>
-											<span className="text-2xl font-extrabold">{dealProduct.price}</span>
+											{dealProduct.specialPrice ? (
+												<div className="flex items-baseline gap-3">
+													<span className="text-sm text-gray-500 line-through">{typeof dealProduct.price === 'number' ? `R${dealProduct.price}` : dealProduct.price}</span>
+													<span className="text-2xl font-extrabold text-red-600">{typeof dealProduct.specialPrice === 'number' ? `R${dealProduct.specialPrice}` : dealProduct.specialPrice}</span>
+												</div>
+											) : (
+												<span className="text-2xl font-extrabold">{dealProduct.price}</span>
+											)}
 											<div className="text-sm text-gray-600">Limited time</div>
 										</div>
 										<Link to="/shop">
@@ -119,6 +126,7 @@ const FeaturedProducts = () => {
 										images={product.images}
 										description={product.description}
 										price={product.price}
+										specialPrice={product.specialPrice}
 										stock={product.stock} />
 								</motion.div>
 							);

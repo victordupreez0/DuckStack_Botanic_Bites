@@ -82,6 +82,7 @@ exports.addProduct = async (req, res) => {
       name: req.body.name,
       species: req.body.species,
       price: Number(req.body.price),
+  specialPrice: req.body.specialPrice !== undefined && req.body.specialPrice !== '' ? Number(req.body.specialPrice) : undefined,
       description: req.body.description,
       images,
       category: req.body.category,
@@ -142,6 +143,7 @@ exports.updateProduct = async (req, res) => {
     }
     if (req.body.category !== undefined) update.category = req.body.category;
     if (req.body.stock !== undefined) update.stock = Number(req.body.stock);
+  if (req.body.specialPrice !== undefined) update.specialPrice = req.body.specialPrice === '' ? null : Number(req.body.specialPrice);
     // allow updating admin flags
     if (req.body.featured !== undefined) update.featured = req.body.featured === 'true' || req.body.featured === true;
     if (req.body.specialDeal !== undefined) update.specialDeal = req.body.specialDeal === 'true' || req.body.specialDeal === true;

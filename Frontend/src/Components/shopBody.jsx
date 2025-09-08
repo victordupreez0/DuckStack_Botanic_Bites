@@ -36,7 +36,8 @@ function ShopBody() {
               image={product.image}
               images={product.images}
               description={product.description}
-              price={`R${product.price}`}
+              price={product.price}
+              specialPrice={product.specialPrice}
               stock={typeof product.stock === 'number' ? (product.stock > 0 ? 'In Stock' : 'Out of Stock') : 'Out of Stock'}
               onClick={() => {
                 const p = { ...product };

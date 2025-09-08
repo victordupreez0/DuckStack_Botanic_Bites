@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProductCard = ({ title, image, images, description, price, stock }) => {
+const ProductCard = ({ title, image, images, description, price, specialPrice, stock }) => {
   const normalize = (src) => {
     if (!src) return null;
     // if it's an object with original/thumb fields
@@ -38,7 +38,17 @@ const ProductCard = ({ title, image, images, description, price, stock }) => {
           <span className="text-green-600 font-semibold">In Stock</span>
         )}
         <div className="card-actions justify-between items-center">
-          <span className="font-bold text-lg">{price}</span>
+          <div className="text-lg font-bold flex items-baseline gap-3">
+            {specialPrice ? (
+              <>
+                <span className="text-sm text-gray-500 line-through">{typeof price === 'number' ? `R${price}` : price}</span>
+                <span className="text-lg text-red-600 font-extrabold">{typeof specialPrice === 'number' ? `R${specialPrice}` : specialPrice}</span>
+              </>
+            ) : (
+              <span className="text-lg font-bold">{typeof price === 'number' ? `R${price}` : price}</span>
+            )}
+          </div>
+
           <button className="btn bg-black text-white border-none focus:outline-none focus:ring-0">
             Buy Now
           </button>

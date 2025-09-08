@@ -4,7 +4,8 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
   const [form, setForm] = useState({
     name: "",
     species: "",
-    price: "",
+  price: "",
+  specialPrice: "",
     description: "",
     category: "",
   });
@@ -23,7 +24,8 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
     setForm({
       name: product.name || "",
       species: product.species || "",
-      price: product.price ?? "",
+  price: product.price ?? "",
+  specialPrice: product.specialPrice ?? "",
       description: product.description || "",
       category: product.category || "",
     });
@@ -97,6 +99,7 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
       formData.append('name', form.name);
       formData.append('species', form.species || '');
       formData.append('price', form.price || '0');
+  formData.append('specialPrice', form.specialPrice || '');
       formData.append('description', form.description || '');
       formData.append('category', form.category || '');
       formData.append('featured', featured);
@@ -170,6 +173,7 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
       <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input border border-black bg-white text-black w-full m-2" />
       <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input border border-black bg-white text-black w-full m-2" />
       <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="Price" required className="input border border-black bg-white text-black w-full m-2" />
+  <input type="number" name="specialPrice" value={form.specialPrice} onChange={handleChange} placeholder="Special Price (optional)" className="input border border-black bg-white text-black w-full m-2" />
       <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="textarea border border-black bg-white text-black w-full m-2" />
       <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="input border border-black bg-white text-black w-full m-2" />
       <label className="block w-full m-2">

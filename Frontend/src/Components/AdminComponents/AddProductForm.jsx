@@ -5,6 +5,7 @@ const AddProductForm = ({ onProductAdded }) => {
   name: "",
   species: "",
   price: "",
+  specialPrice: "",
   description: "",
   category: "",
   });
@@ -35,6 +36,7 @@ const AddProductForm = ({ onProductAdded }) => {
       formData.append('name', form.name);
       formData.append('species', form.species || '');
       formData.append('price', form.price || '0');
+  formData.append('specialPrice', form.specialPrice || '');
       formData.append('description', form.description || '');
       formData.append('category', form.category || '');
       files.forEach(f => formData.append('images', f));
@@ -56,7 +58,7 @@ const AddProductForm = ({ onProductAdded }) => {
         throw new Error(result.error || 'Failed to add product');
       }
   onProductAdded(result);
-  setForm({ name: "", species: "", price: "", description: "", category: "" });
+  setForm({ name: "", species: "", price: "", specialPrice: "", description: "", category: "" });
   setFiles([]);
     } catch (err) {
       setError(err.message);
@@ -70,8 +72,9 @@ const AddProductForm = ({ onProductAdded }) => {
       <h3 className="text-lg font-bold text-black w-full">Add Product</h3>
       <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input border border-black bg-white text-black w-full m-2" />
       <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input border border-black bg-white text-black w-full m-2" />
-      <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="Price" required className="input border border-black bg-white text-black w-full m-2" />
-      <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="textarea border border-black bg-white text-black w-full m-2" />
+  <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="Price" required className="input border border-black bg-white text-black w-full m-2" />
+  <input type="number" name="specialPrice" value={form.specialPrice} onChange={handleChange} placeholder="Special Price (optional)" className="input border border-black bg-white text-black w-full m-2" />
+  <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="textarea border border-black bg-white text-black w-full m-2" />
       <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="input border border-black bg-white text-black w-full m-2" />
       <label className="block w-full m-2">
         <span className="text-sm">Upload up to 4 images</span>

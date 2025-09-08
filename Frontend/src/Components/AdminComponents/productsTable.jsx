@@ -67,7 +67,16 @@ const ProductsTable = ({ products, onDelete }) => {
                   <span>{product.name}</span>
                 </td>
                 <td>{product.species || '-'}</td>
-                <td className="font-semibold">R{product.price}</td>
+                <td className="font-semibold">
+                  {product && (product.specialPrice !== undefined && product.specialPrice !== null && product.specialPrice !== '') ? (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500 line-through">{typeof product.price === 'number' ? `R${product.price}` : `R${product.price}`}</span>
+                      <span className="text-base text-red-600 font-extrabold">{typeof product.specialPrice === 'number' ? `R${product.specialPrice}` : `R${product.specialPrice}`}</span>
+                    </div>
+                  ) : (
+                    <span>{product.price !== undefined && product.price !== null ? `R${product.price}` : 'R0'}</span>
+                  )}
+                </td>
                 <td>{product.stock ?? 0}</td>
                 <td>
                   <button
