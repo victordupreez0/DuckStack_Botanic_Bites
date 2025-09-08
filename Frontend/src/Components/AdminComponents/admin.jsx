@@ -30,7 +30,9 @@ const ProductsPage = () => {
       }
       // also fetch bundles and merge as special products
       try {
-        const bres = await fetch('http://localhost:3000/api/bundles');
+        const bres = await fetch('http://localhost:3000/api/bundles?showAll=true', {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
         let bundles = [];
         try { bundles = await bres.json(); } catch (e) { bundles = []; }
         if (Array.isArray(bundles) && bundles.length) {

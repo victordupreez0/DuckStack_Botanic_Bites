@@ -186,8 +186,9 @@ exports.checkout = async (req, res) => {
     const lineItems = cart.items.map(item => {
       const p = prodById[item.productId];
       if (!p) return null;
-      const isBundle = p.__type === 'bundle';
-      const unitPrice = isBundle ? (p.specialPrice !== undefined && p.specialPrice !== null ? Number(p.specialPrice) : Number(p.price) || 0) : (Number(p.price) || 0);
+  const isBundle = p.__type === 'bundle';
+  // Use specialPrice when available for both products and bundles
+  const unitPrice = (p.specialPrice !== undefined && p.specialPrice !== null) ? Number(p.specialPrice) : (Number(p.price) || 0);
       return {
         productId: item.productId,
         name: p.title || p.name,

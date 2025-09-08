@@ -19,7 +19,9 @@ function ShopBody() {
           let bundles = [];
           try { bundles = await bres.json(); } catch { bundles = []; }
           if (Array.isArray(bundles) && bundles.length) {
-            const bp = bundles.map(b => ({
+            // filter hidden bundles defensively (server should handle this when not showAll)
+            const visibleBundles = bundles.filter(b => !(b.hidden === true || b.hidden === 'true'));
+            const bp = visibleBundles.map(b => ({
               _id: b._id,
               name: b.title,
               species: 'Bundle',

@@ -13,6 +13,9 @@ export default function ProductPage() {
   const [visibleToast, setVisibleToast] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
+  const hasSpecial = product && product.specialPrice !== undefined && product.specialPrice !== null;
+  const displayPrice = hasSpecial ? product.specialPrice : (product?.price ?? 0);
+
   const showAddedToast = (name) => {
     setToastName(name || 'Item');
     setShowToast(true);
@@ -67,7 +70,16 @@ export default function ProductPage() {
         <p className="mt-2 h-50 text-black text-left font-light">{product?.description || 'Product description here...'}</p>
 
         <div className="mt-10">
-          <p className="mt-2 text-black text-4xl text-left font-semibold">Price: R{product?.price ?? '0'}</p>
+          <div className="mt-2 text-left">
+            {hasSpecial ? (
+              <div className="text-4xl font-semibold text-black">
+                <span className="text-sm text-gray-500 line-through mr-3">R{product?.price ?? '0'}</span>
+                <span>R{displayPrice}</span>
+              </div>
+            ) : (
+              <p className="text-4xl text-black font-semibold">Price: R{displayPrice}</p>
+            )}
+          </div>
           <p className="mt-1 text-left text-black">Stock: {product?.stock || 'N/A'}</p>
 
           <div className="flex mt-5 justify-start gap-2 relative items-center">

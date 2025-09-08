@@ -55,6 +55,7 @@ exports.createBundle = async (req, res) => {
 
     const collection = await getCollection();
     const stock = body.stock !== undefined ? Number(body.stock) : 0;
+    const hidden = body.hidden === 'true' || body.hidden === true || false;
     const doc = {
       title: String(title),
       description: description ? String(description) : '',
@@ -62,6 +63,7 @@ exports.createBundle = async (req, res) => {
       specialPrice: specialPrice !== undefined && specialPrice !== '' ? Number(specialPrice) : undefined,
       specialDeal: specialDeal === true || specialDeal === 'true' || specialDeal === 1 || specialDeal === '1' || false,
       stock,
+      hidden,
       items: normalized,
       images,
       createdAt: new Date()
@@ -79,7 +81,7 @@ exports.updateBundle = async (req, res) => {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) return res.status(400).json({ error: 'Invalid bundle id' });
     const body = req.body || {};
-    const update = {};
+  const update = {};
   if (body.title !== undefined) update.title = body.title;
     if (body.name !== undefined && !update.title) update.title = body.name;
     if (body.description !== undefined) update.description = body.description;
@@ -100,6 +102,7 @@ exports.updateBundle = async (req, res) => {
     }
 
   if (body.stock !== undefined) update.stock = Number(body.stock);
+  if (body.hidden !== undefined) update.hidden = body.hidden === 'true' || body.hidden === true;
 
     // images: handle uploaded files or provided URLs
     if ((req.files && req.files.length) || body.images !== undefined || body.image !== undefined) {
@@ -128,8 +131,11 @@ exports.updateBundle = async (req, res) => {
 
 exports.getBundles = async (req, res) => {
   try {
-    const collection = await getCollection();
-    const bundles = await collection.find({}).toArray();
+  const collection = await getCollection();
+  // Mirror product listing behavior: when not showing all, return only in-stock bundles that are not hidden
+  const showAll = String(req.query.showAll || '').toLowerCase() === 'true';
+  const filter = showAll ? {} : { stock: { $gt: 0 }, hidden: { $ne: true } };
+  const bundles = await collection.find(filter).toArray();
     res.json(bundles);
   } catch (err) {
     console.error('getBundles error:', err);

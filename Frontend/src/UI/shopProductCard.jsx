@@ -1,4 +1,4 @@
-const ShopProductCard = ({ species, title, image, images, description, price, specialPrice, stock, onClick, descriptionLimit = 30 }) => {
+const ShopProductCard = ({ species, title, image, images, description, price, specialPrice, stock, onClick, descriptionLimit = 30, imageHeight = 'h-56', fullHeight = false }) => {
   const normalize = (src) => {
     if (!src) return null;
     if (typeof src === 'object') {
@@ -19,18 +19,31 @@ const ShopProductCard = ({ species, title, image, images, description, price, sp
     if (words.length <= wordLimit) return words.join(' ');
     return words.slice(0, wordLimit).join(' ') + '...';
   };
+  // compute classes based on fullHeight prop
+  const rootClass = fullHeight
+    ? 'w-full max-w-sm overflow-hidden cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-200 h-full flex flex-col'
+    : 'w-full max-w-sm overflow-hidden cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-200';
+
+  const imgClass = fullHeight
+    ? 'object-cover object-center w-full h-1/2'
+    : `object-cover object-center w-full ${imageHeight}`;
+
+  const contentClass = fullHeight
+    ? 'py-4 text-left ml-5 flex flex-col justify-between flex-grow'
+    : 'py-4 text-left ml-5';
+
   return (
     <div
-      className="w-full max-w-sm overflow-hidden cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-200"
+      className={rootClass}
       onClick={onClick} // this makes the card clickable
     >
-  <img className="object-cover object-center w-full h-56" src={normalize((images && images[0]) ? images[0] : image)} alt={title} />
+      <img className={imgClass} src={normalize((images && images[0]) ? images[0] : image)} alt={title} />
       <div className="flex items-center px-6 py-3 bg-black">
         <h2 className="text-sm font-light text-white">{species}</h2>
       </div>
-      <div className="py-4 text-left ml-5">
+      <div className={contentClass}>
         <h2 className="text-lg font-semibold text-gray-800 text-black">{title}</h2>
-  <p className="py-2 text-gray-700 dark:text-gray-400">{truncateWords(description, 30)}</p>
+        {fullHeight ? null : <p className="py-2 text-gray-700 dark:text-gray-400">{truncateWords(description, 30)}</p>}
         <div className="flex items-baseline gap-3">
           {specialPrice ? (
             <>

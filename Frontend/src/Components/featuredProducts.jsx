@@ -71,7 +71,8 @@ const FeaturedProducts = () => {
 						let bundles = [];
 						try { bundles = await bres.json(); } catch (e) { bundles = []; }
 						if (Array.isArray(bundles) && bundles.length) {
-							const bundleProducts = bundles.map(b => ({
+							const visibleBundles = bundles.filter(b => !(b.hidden === true || b.hidden === 'true'));
+							const bundleProducts = visibleBundles.map(b => ({
 								_id: b._id || b._id?._id || (b._id && b._id.$oid) || b._id,
 								name: b.title || b.name || 'Bundle',
 								species: 'Bundle',
@@ -153,7 +154,7 @@ const FeaturedProducts = () => {
 					descriptionLimit={15}
 					onClick={() => navigate('/productPage', { state: { product } })}
 					images={product.images}
-					description={product.description}
+					/* description intentionally omitted for featured small cards */
 					price={product.price}
 					specialPrice={product.specialPrice}
 					stock={typeof product.stock === 'number' ? (product.stock > 0 ? 'In Stock' : 'Out of Stock') : 'Out of Stock'} />
@@ -175,7 +176,7 @@ const FeaturedProducts = () => {
 				<h2 className="text-black text-4xl md:text-5xl">Featured Products</h2>
 			</div>
 
-			<div className="mb-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+			<div className="mb-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 				{/* Large deal card (left) */}
 				<div>
 					<motion.div
@@ -183,15 +184,19 @@ const FeaturedProducts = () => {
 						initial={{ opacity: 0, y: 20 }}
 						animate={dealInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
 						transition={{ duration: 0.6, ease: "easeOut" }}
-						className="relative overflow-hidden rounded-lg shadow-md"
+						className="relative overflow-hidden rounded-lg shadow-md h-full flex flex-col"
 					>
-						<img className="object-cover w-full h-96" src={imgSrc} alt={title} />
+						<img className="object-cover w-full h-1/2" src={imgSrc} alt={title} />
 						<div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded">Deal</div>
-						<div className="bg-white p-6">
-							<h3 className="text-sm text-gray-500">{species}</h3>
-							<h2 className="text-3xl font-bold text-black my-2">{title}</h2>
-							<p className="text-gray-700 mb-4">{dealProduct.description || ''}</p>
-							<div className="flex items-center justify-between">
+						<div className="bg-white p-6 flex flex-col justify-between flex-grow">
+							<div>
+								<h3 className="text-sm text-gray-500">{species}</h3>
+								<h2 className="text-3xl font-bold text-black my-2">{title}</h2>
+								{dealProduct && dealProduct.specialDeal ? (
+									<p className="text-gray-700 mb-4">{dealProduct.description || ''}</p>
+								) : null}
+							</div>
+							<div className="flex items-center justify-between mt-4">
 								<div>
 									{dealProduct.specialPrice ? (
 										<div className="flex items-baseline gap-3">
@@ -216,9 +221,11 @@ const FeaturedProducts = () => {
 
 				{/* Right: 2x2 small cards */}
 				<div>
-					<div className="grid grid-cols-2 gap-4">
+					<div className="grid grid-cols-2 gap-4 h-full">
 						{featuredSmall.map(p => (
-							<SmallCard key={p._id || p.id} product={p} />
+							<div key={p._id || p.id} className="h-full">
+								<SmallCard product={p} />
+							</div>
 						))}
 					</div>
 				</div>
