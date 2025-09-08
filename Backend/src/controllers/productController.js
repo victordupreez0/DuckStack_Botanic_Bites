@@ -13,17 +13,36 @@ exports.incrementStock = async (req, res) => {
     }
     // Check if product exists first
     const existingProduct = await collection.findOne({ _id: new ObjectId(id) });
-    if (!existingProduct) {
-      return res.status(404).json({ error: 'Product not found' });
+    if (existingProduct) {
+      // Update stock on product
+      await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { stock: amount } }
+      );
+      const updatedProduct = await collection.findOne({ _id: new ObjectId(id) });
+      return res.json(updatedProduct);
     }
-    // Update stock
-    await collection.updateOne(
-      { _id: new ObjectId(id) },
-      { $inc: { stock: amount } }
-    );
-    // Return updated product
-    const updatedProduct = await collection.findOne({ _id: new ObjectId(id) });
-    res.json(updatedProduct);
+
+    // If not found in products, attempt to update bundles collection so admins can add stock to bundles
+    const { MongoClient } = require('mongodb');
+    const uri = process.env.ACCESS_STRING;
+    const DB_NAME = 'Botanic-DB';
+    const BUNDLE_COLLECTION = 'bundles';
+    let localClient;
+    try {
+      localClient = new MongoClient(uri, { useUnifiedTopology: true });
+      await localClient.connect();
+      const bundleColl = localClient.db(DB_NAME).collection(BUNDLE_COLLECTION);
+      const existingBundle = await bundleColl.findOne({ _id: new ObjectId(id) });
+      if (!existingBundle) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      await bundleColl.updateOne({ _id: new ObjectId(id) }, { $inc: { stock: amount } });
+      const updatedBundle = await bundleColl.findOne({ _id: new ObjectId(id) });
+      return res.json(updatedBundle);
+    } finally {
+      try { if (localClient) await localClient.close(); } catch (e) {}
+    }
   } catch (err) {
     console.error('incrementStock error:', err);
     res.status(500).json({ error: err.message });

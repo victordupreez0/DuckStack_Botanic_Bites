@@ -1,4 +1,4 @@
-const ShopProductCard = ({ species, title, image, images, description, price, specialPrice, stock, onClick }) => {
+const ShopProductCard = ({ species, title, image, images, description, price, specialPrice, stock, onClick, descriptionLimit = 30 }) => {
   const normalize = (src) => {
     if (!src) return null;
     if (typeof src === 'object') {
@@ -13,7 +13,7 @@ const ShopProductCard = ({ species, title, image, images, description, price, sp
     if (s.startsWith('uploads/')) return `http://localhost:3000/${s}`;
     return s;
   };
-  const truncateWords = (text, wordLimit = 30) => {
+  const truncateWords = (text, wordLimit = descriptionLimit) => {
     if (!text) return '';
     const words = String(text).split(/\s+/).filter(Boolean);
     if (words.length <= wordLimit) return words.join(' ');
@@ -35,7 +35,7 @@ const ShopProductCard = ({ species, title, image, images, description, price, sp
           {specialPrice ? (
             <>
               <span className="text-sm text-gray-500 line-through">{typeof price === 'number' ? `R${price}` : price}</span>
-              <span className="text-xl font-extrabold text-red-600">{typeof specialPrice === 'number' ? `R${specialPrice}` : specialPrice}</span>
+              <span className="text-xl font-extrabold text-black">{typeof specialPrice === 'number' ? `R${specialPrice}` : specialPrice}</span>
             </>
           ) : (
             <span className="text-xl font-bold text-black">{typeof price === 'number' ? `R${price}` : price}</span>

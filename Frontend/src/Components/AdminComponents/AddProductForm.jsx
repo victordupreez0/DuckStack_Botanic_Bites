@@ -52,7 +52,8 @@ const AddProductForm = ({ onProductAdded }) => {
       try {
         result = await res.json();
       } catch (jsonErr) {
-        throw new Error('Invalid server response');
+        const txt = await res.text().catch(() => '');
+        throw new Error(txt || 'Invalid server response');
       }
       if (!res.ok) {
         throw new Error(result.error || 'Failed to add product');

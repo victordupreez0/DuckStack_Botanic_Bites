@@ -20,9 +20,17 @@ const AddStockForm = ({ products = [], onStockUpdated }) => {
         },
         body: JSON.stringify({ amount: Number(amount) })
       });
-      const result = await res.json();
+      let result;
+      try {
+        result = await res.json();
+      } catch (e) {
+        const txt = await res.text().catch(() => '');
+        setError(txt || 'Failed to update stock');
+        setLoading(false);
+        return;
+      }
       if (!res.ok || !result || !result._id) {
-        setError(result.error || 'Failed to update stock');
+        setError(result?.error || 'Failed to update stock');
         return;
       }
       setError(''); // Clear error if update succeeds

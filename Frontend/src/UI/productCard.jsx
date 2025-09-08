@@ -42,7 +42,7 @@ const ProductCard = ({ title, image, images, description, price, specialPrice, s
             {specialPrice ? (
               <>
                 <span className="text-sm text-gray-500 line-through">{typeof price === 'number' ? `R${price}` : price}</span>
-                <span className="text-lg text-red-600 font-extrabold">{typeof specialPrice === 'number' ? `R${specialPrice}` : specialPrice}</span>
+                <span className="text-lg text-black font-extrabold">{typeof specialPrice === 'number' ? `R${specialPrice}` : specialPrice}</span>
               </>
             ) : (
               <span className="text-lg font-bold">{typeof price === 'number' ? `R${price}` : price}</span>

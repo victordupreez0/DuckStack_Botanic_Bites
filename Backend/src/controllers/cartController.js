@@ -13,6 +13,15 @@ async function getProductsCollection() {
   return clientForProducts.db(DB_NAME).collection('products');
 }
 
+let clientForBundles;
+async function getBundlesCollection() {
+  if (!clientForBundles) {
+    clientForBundles = new MongoClient(uri, { useUnifiedTopology: true });
+    await clientForBundles.connect();
+  }
+  return clientForBundles.db(DB_NAME).collection('bundles');
+}
+
 // Return the user's cart document; create if missing
 exports.getCart = async (req, res) => {
   try {
@@ -52,8 +61,17 @@ exports.addOrUpdateItem = async (req, res) => {
 
     // Ensure product exists and has price
     const products = await getProductsCollection();
-    const prod = await products.findOne({ _id: ObjectId.isValid(productId) ? new ObjectId(productId) : productId });
-    if (!prod) return res.status(404).json({ error: 'Product not found' });
+    const bundles = await getBundlesCollection();
+    const lookupId = ObjectId.isValid(productId) ? new ObjectId(productId) : productId;
+    let prod = await products.findOne({ _id: lookupId });
+    let isBundle = false;
+    if (!prod) {
+      // try bundles
+      const bundle = await bundles.findOne({ _id: lookupId });
+      if (!bundle) return res.status(404).json({ error: 'Product not found' });
+      prod = bundle;
+      isBundle = true;
+    }
 
 
     // If quantity === 0 then remove item
@@ -150,25 +168,35 @@ exports.checkout = async (req, res) => {
     const cart = await carts.findOne({ userId: queryUserId }) || { items: [] };
 
     const products = await getProductsCollection();
+    const bundles = await getBundlesCollection();
 
     // Build line items with up-to-date price & image & name
     const productIds = cart.items.map(i => i.productId);
     // Convert productIds to ObjectId when valid
     const productQueries = productIds.map(id => (ObjectId.isValid(id) ? new ObjectId(id) : id));
+
+    // Fetch products and bundles that match
     const prods = await products.find({ _id: { $in: productQueries } }).toArray();
+    const bnds = await bundles.find({ _id: { $in: productQueries } }).toArray();
+
     const prodById = {};
-    prods.forEach(p => { prodById[p._id.toString()] = p; });
+    prods.forEach(p => { prodById[p._id.toString()] = { ...p, __type: 'product' }; });
+    bnds.forEach(b => { prodById[b._id.toString()] = { ...b, __type: 'bundle' }; });
 
     const lineItems = cart.items.map(item => {
       const p = prodById[item.productId];
       if (!p) return null;
+      const isBundle = p.__type === 'bundle';
+      const unitPrice = isBundle ? (p.specialPrice !== undefined && p.specialPrice !== null ? Number(p.specialPrice) : Number(p.price) || 0) : (Number(p.price) || 0);
       return {
         productId: item.productId,
-        name: p.name,
-        unitPrice: Number(p.price) || 0,
+        name: p.title || p.name,
+        unitPrice,
         quantity: item.quantity,
         image: Array.isArray(p.images) && p.images.length ? p.images[0] : null,
-        subtotal: (Number(p.price) || 0) * item.quantity
+        subtotal: unitPrice * item.quantity,
+        isBundle: isBundle,
+        bundleItems: isBundle ? (p.items || []) : undefined
       };
     }).filter(Boolean);
 

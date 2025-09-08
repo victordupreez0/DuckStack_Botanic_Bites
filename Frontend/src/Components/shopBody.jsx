@@ -11,7 +11,30 @@ function ShopBody() {
     const fetchProducts = async () => {
       try {
         const res = await fetch('http://localhost:3000/api/products');
-        const data = await res.json();
+        let data;
+        try { data = await res.json(); } catch { data = []; }
+        // fetch bundles and merge so special bundles appear in shop
+        try {
+          const bres = await fetch('http://localhost:3000/api/bundles');
+          let bundles = [];
+          try { bundles = await bres.json(); } catch { bundles = []; }
+          if (Array.isArray(bundles) && bundles.length) {
+            const bp = bundles.map(b => ({
+              _id: b._id,
+              name: b.title,
+              species: 'Bundle',
+              price: b.price,
+              specialPrice: b.specialPrice !== undefined ? b.specialPrice : undefined,
+              description: b.description,
+              images: b.images || [],
+              stock: (typeof b.stock === 'number') ? b.stock : (b.stock ? Number(b.stock) : 0),
+              isBundle: true,
+              bundleItems: b.items || [],
+              specialDeal: b.specialDeal || false
+            }));
+            data = Array.isArray(data) ? data.concat(bp) : bp;
+          }
+        } catch (e) { /* ignore */ }
         setProducts(data);
       } catch (err) {
         // handle error

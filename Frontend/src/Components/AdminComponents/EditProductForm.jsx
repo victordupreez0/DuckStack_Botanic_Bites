@@ -97,7 +97,8 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
       const token = localStorage.getItem('token');
       const formData = new FormData();
       formData.append('name', form.name);
-      formData.append('species', form.species || '');
+  // For bundles we'll set species to 'Bundle' on the backend; keep species editable for normal products
+  formData.append('species', form.species || '');
       formData.append('price', form.price || '0');
   formData.append('specialPrice', form.specialPrice || '');
       formData.append('description', form.description || '');
@@ -146,14 +147,25 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
         },
         body: formData
       });
-      const bodyText = await res.text();
+      // If product is a bundle, send to bundles endpoint instead
+      let finalRes = res;
+      if (product.isBundle) {
+        finalRes = await fetch(`http://localhost:3000/api/bundles/${product._id}`, {
+          method: 'PATCH',
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: formData
+        });
+      }
+      const bodyText = await finalRes.text();
       let parsed;
       try {
         parsed = JSON.parse(bodyText);
       } catch (e) {
         parsed = { raw: bodyText };
       }
-      if (!res.ok) {
+      if (!finalRes.ok) {
         const msg = (parsed && (parsed.error || parsed.message)) ? (parsed.error || parsed.message) : (parsed.raw || 'Failed to update');
         throw new Error(msg);
       }

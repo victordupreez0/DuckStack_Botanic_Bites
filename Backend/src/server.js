@@ -61,6 +61,10 @@ app.use('/api/cart', cartRoutes);
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', auth, isAdmin, adminRoutes);
 
+// Bundles API
+const bundlesRoutes = require('./routes/bundles');
+app.use('/api/bundles', bundlesRoutes);
+
 // Catch-all for debugging unknown requests
 // Catch-all for debugging unknown requests — return 404 so requests don't hang
 app.use((req, res) => {

@@ -6,6 +6,7 @@ import Dashboard from "./dashboard";
 import History from "./history";
 import AddProductButton from "./AddProductButton";
 import AddStockButton from "./AddStockButton";
+import AddBundleButton from "./AddBundleButton";
 import ProductsTable from "./productsTable";
 import Orders from "./orders";
 import Users from "./users";
@@ -19,7 +20,38 @@ const ProductsPage = () => {
       const res = await fetch("http://localhost:3000/api/products?showAll=true", {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        const txt = await res.text().catch(() => '');
+        console.warn('Non-JSON response from products API:', txt);
+        data = [];
+      }
+      // also fetch bundles and merge as special products
+      try {
+        const bres = await fetch('http://localhost:3000/api/bundles');
+        let bundles = [];
+        try { bundles = await bres.json(); } catch (e) { bundles = []; }
+        if (Array.isArray(bundles) && bundles.length) {
+          const bundleProducts = bundles.map(b => ({
+            _id: b._id || b._id?._id || (b._id && b._id.$oid) || b._id,
+            name: b.title || b.name || 'Bundle',
+            species: 'Bundle',
+            price: b.price || 0,
+            specialPrice: b.specialPrice !== undefined ? b.specialPrice : undefined,
+            description: b.description || '',
+            images: b.images || [],
+            stock: (typeof b.stock === 'number') ? b.stock : (b.stock ? Number(b.stock) : 0),
+            isBundle: true,
+            bundleItems: b.items || [],
+            specialDeal: b.specialDeal === true || b.specialDeal === 'true' || false
+          }));
+          // append bundles to the products array so admins can edit/delete them
+          if (Array.isArray(data)) data = data.concat(bundleProducts);
+          else data = bundleProducts.concat(data || []);
+        }
+      } catch (e) { /* non-fatal */ }
       // normalize _id to string for frontend usage (avoid [object Object])
       const normalized = Array.isArray(data) ? data.map(p => ({
         ...p,
@@ -74,6 +106,11 @@ const ProductsPage = () => {
   <AddProductButton onProductAdded={handleProductAdded} />
       <AddStockButton products={products} onStockUpdated={async () => {
         await fetchProducts();
+      }} />
+      <AddBundleButton products={products} onBundleAdded={async () => {
+        // reload products to ensure any changes are visible
+        await fetchProducts();
+        try { window.dispatchEvent(new CustomEvent('admin:bundleAdded')); } catch(e){}
       }} />
       <button
         className="btn bg-black text-white m-2"

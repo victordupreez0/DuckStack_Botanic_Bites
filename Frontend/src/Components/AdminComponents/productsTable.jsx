@@ -44,10 +44,10 @@ const ProductsTable = ({ products, onDelete }) => {
         <tbody>
           {products && products.length > 0 ? (
             products.map((product, idx) => (
-              <tr key={product._id || product.name} className="hover:bg-gray-100">
+        <tr key={product._id || product.name} className={`${product.isBundle ? 'bg-teal-50 hover:bg-teal-100' : 'hover:bg-gray-100'}`}>
                 <th>{idx + 1}</th>
                 <td className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded overflow-hidden bg-gray-200">
+          <div className={`w-12 h-12 rounded overflow-hidden ${product.isBundle ? 'border-2 border-teal-400' : 'bg-gray-200'}`}>
                     {
                       (() => {
                         const src = product.images && product.images[0] ? product.images[0] : null;
@@ -66,12 +66,12 @@ const ProductsTable = ({ products, onDelete }) => {
                   </div>
                   <span>{product.name}</span>
                 </td>
-                <td>{product.species || '-'}</td>
+                <td>{product.isBundle ? 'Bundle' : (product.species || '-')}</td>
                 <td className="font-semibold">
                   {product && (product.specialPrice !== undefined && product.specialPrice !== null && product.specialPrice !== '') ? (
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-500 line-through">{typeof product.price === 'number' ? `R${product.price}` : `R${product.price}`}</span>
-                      <span className="text-base text-red-600 font-extrabold">{typeof product.specialPrice === 'number' ? `R${product.specialPrice}` : `R${product.specialPrice}`}</span>
+                      <span className="text-base text-black font-extrabold">{typeof product.specialPrice === 'number' ? `R${product.specialPrice}` : `R${product.specialPrice}`}</span>
                     </div>
                   ) : (
                     <span>{product.price !== undefined && product.price !== null ? `R${product.price}` : 'R0'}</span>
