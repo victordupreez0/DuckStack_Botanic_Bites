@@ -125,3 +125,21 @@ exports.googleLogin = async (req, res) => {
     res.status(500).json({ message: 'Google login failed' });
   }
 };
+
+// Debugging helper: verify a token passed in Authorization header and return decoded payload
+exports.verifyToken = async (req, res) => {
+  try {
+    const jwt = require('jsonwebtoken');
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.status(400).json({ ok: false, message: 'No token provided' });
+    const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) return res.status(403).json({ ok: false, message: 'Invalid token', details: err && err.message });
+      return res.json({ ok: true, payload: decoded });
+    });
+  } catch (err) {
+    console.error('verifyToken error:', err);
+    res.status(500).json({ ok: false, message: 'Server error' });
+  }
+};
