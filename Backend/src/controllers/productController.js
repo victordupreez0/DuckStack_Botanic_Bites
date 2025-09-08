@@ -57,9 +57,26 @@ exports.deleteProduct = async (req, res) => {
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
     console.log('Delete result:', result);
     if (result.deletedCount === 1) {
-      res.status(200).json({ success: true });
-    } else {
-      res.status(404).json({ error: 'Product not found' });
+      return res.status(200).json({ success: true });
+    }
+
+    // If not found in products, attempt to delete from bundles collection
+    const { MongoClient } = require('mongodb');
+    const uri = process.env.ACCESS_STRING;
+    const DB_NAME = 'Botanic-DB';
+    const BUNDLE_COLLECTION = 'bundles';
+    let localClient;
+    try {
+      localClient = new MongoClient(uri, { useUnifiedTopology: true });
+      await localClient.connect();
+      const bundleColl = localClient.db(DB_NAME).collection(BUNDLE_COLLECTION);
+      const bres = await bundleColl.deleteOne({ _id: new ObjectId(id) });
+      if (bres && bres.deletedCount === 1) {
+        return res.status(200).json({ success: true });
+      }
+      return res.status(404).json({ error: 'Product not found' });
+    } finally {
+      try { if (localClient) await localClient.close(); } catch (e) {}
     }
   } catch (err) {
     console.error('Delete error:', err);
