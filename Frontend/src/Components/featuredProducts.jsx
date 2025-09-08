@@ -176,7 +176,7 @@ const FeaturedProducts = () => {
 				<h2 className="text-black text-4xl md:text-5xl">Featured Products</h2>
 			</div>
 
-			<div className="mb-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+			<div className="mb-10 mx-4 md:mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 				{/* Large deal card (left) */}
 				<div>
 					<motion.div

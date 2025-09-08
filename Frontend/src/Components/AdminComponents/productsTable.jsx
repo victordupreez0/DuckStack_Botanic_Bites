@@ -80,14 +80,14 @@ const ProductsTable = ({ products, onDelete }) => {
                 <td>{product.stock ?? 0}</td>
                 <td>
                   <button
-                    className="btn btn-error btn-xs m-2 text-white"
+                    className="btn btn-error btn-sm m-2 text-white"
                     onClick={() => handleDeleteClick(product)}
                     data-id={product._id}
                   >
                     Delete
                   </button>
                   <button
-                    className="btn btn-base btn-xs m-2 text-white"
+                    className="btn btn-base btn-sm m-2 text-white"
                     onClick={() => handleEditClick(product)}
                     data-id={product._id}
                   >

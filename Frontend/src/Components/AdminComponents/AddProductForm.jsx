@@ -69,7 +69,7 @@ const AddProductForm = ({ onProductAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4 p-4 max-w-md">
+    <form onSubmit={handleSubmit} className="flex flex-col  space-y-4 p-4 max-w-md">
       <h3 className="text-lg font-bold text-black w-full">Add Product</h3>
       <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required className="input border border-black bg-white text-black w-full m-2" />
       <input name="species" value={form.species} onChange={handleChange} placeholder="Species (Greek/Latin name)" className="input border border-black bg-white text-black w-full m-2" />
