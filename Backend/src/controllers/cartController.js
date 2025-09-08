@@ -183,12 +183,31 @@ exports.checkout = async (req, res) => {
     prods.forEach(p => { prodById[p._id.toString()] = { ...p, __type: 'product' }; });
     bnds.forEach(b => { prodById[b._id.toString()] = { ...b, __type: 'bundle' }; });
 
+    // For bundles, we want to expand the bundle items with product names.
+    // Collect inner product ids from all bundles in the cart so we can fetch them in one query.
+    const innerIds = [];
+    bnds.forEach(b => {
+      if (Array.isArray(b.items)) {
+        b.items.forEach(it => {
+          const id = it.productId || it._id || it.id;
+          if (id) innerIds.push(id);
+        });
+      }
+    });
+    // Normalize and dedupe inner ids
+    const innerQueries = Array.from(new Set(innerIds.map(i => (ObjectId.isValid(i) ? new ObjectId(i) : i))));
+    let innerProds = [];
+    if (innerQueries.length) {
+      innerProds = await products.find({ _id: { $in: innerQueries } }).toArray();
+      innerProds.forEach(p => { prodById[p._id.toString()] = { ...p, __type: 'product' }; });
+    }
+
     const lineItems = cart.items.map(item => {
       const p = prodById[item.productId];
       if (!p) return null;
-  const isBundle = p.__type === 'bundle';
-  // Use specialPrice when available for both products and bundles
-  const unitPrice = (p.specialPrice !== undefined && p.specialPrice !== null) ? Number(p.specialPrice) : (Number(p.price) || 0);
+      const isBundle = p.__type === 'bundle';
+      // Use specialPrice when available for both products and bundles
+      const unitPrice = (p.specialPrice !== undefined && p.specialPrice !== null) ? Number(p.specialPrice) : (Number(p.price) || 0);
       return {
         productId: item.productId,
         name: p.title || p.name,
@@ -197,7 +216,16 @@ exports.checkout = async (req, res) => {
         image: Array.isArray(p.images) && p.images.length ? p.images[0] : null,
         subtotal: unitPrice * item.quantity,
         isBundle: isBundle,
-        bundleItems: isBundle ? (p.items || []) : undefined
+        bundleItems: isBundle ? (Array.isArray(p.items) ? p.items.map(it => {
+          const id = it.productId || it._id || it.id;
+          const idStr = id && ObjectId.isValid(id) ? (new ObjectId(id)).toString() : String(id);
+          const prod = prodById[idStr];
+          return {
+            productId: id,
+            qty: it.qty || it.quantity || 1,
+            name: prod ? (prod.name || prod.title) : String(id)
+          };
+        }) : []) : undefined
       };
     }).filter(Boolean);
 

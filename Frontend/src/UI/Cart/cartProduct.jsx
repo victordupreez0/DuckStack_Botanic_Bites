@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiTrash } from 'react-icons/fi';
 function CartProduct({ lineItem, onChange }) {
         const [quantity, setQuantity] = useState(lineItem?.quantity || 1);
+                // bundleItems are now expected to be returned by the checkout API as
+                // an array of { productId, qty, name } when lineItem.isBundle === true
+                const bundleContents = Array.isArray(lineItem.bundleItems) ? lineItem.bundleItems : [];
 
         const updateQuantity = async (newQty) => {
             try {
@@ -56,6 +59,16 @@ function CartProduct({ lineItem, onChange }) {
                         <div className="flex flex-col flex-1 justify-between text-left">
                                 <h2 className="font-semibold text-base md:text-lg mb-1 text-black">{lineItem.name}</h2>
                                 <p className="text-gray-600 mb-2 text-sm md:text-base">R{lineItem.unitPrice}</p>
+                                                                                                        {lineItem.isBundle && bundleContents.length > 0 && (
+                                                                                                                <div className="text-sm text-gray-700 mb-2">
+                                                                                                                        <div className="font-semibold">Includes:</div>
+                                                                                                                        <ul className="list-disc list-inside">
+                                                                                                                                {bundleContents.map((b, idx) => (
+                                                                                                                                        <li key={idx}>{b.qty}× {b.name}</li>
+                                                                                                                                ))}
+                                                                                                                        </ul>
+                                                                                                                </div>
+                                                                                                        )}
                                 <div className="flex flex-row items-center justify-between gap-2 mt-2">
                                         {/* Quantity selector */}
                                         <div className="flex items-center px-2 py-1 border rounded-lg bg-gray-50">
