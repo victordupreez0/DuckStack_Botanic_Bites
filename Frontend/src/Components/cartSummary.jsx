@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
-function CartSummary() {
+function CartSummary({ total = 0 }) {
     const [quantity, setQuantity] = useState(1);
 
     const handleIncrease = () => setQuantity(prev => prev + 1);
@@ -18,7 +18,7 @@ function CartSummary() {
 
             <div className="flex">
            <p className="text-black text-lg font-semibold">Subtotal</p> 
-           <p className="ml-auto text-lg text-black  ">R300</p>
+           <p className="ml-auto text-lg text-black  ">R{total}</p>
            </div>
 
                         <div className="flex items-center">

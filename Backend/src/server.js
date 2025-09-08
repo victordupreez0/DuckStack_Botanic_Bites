@@ -53,6 +53,10 @@ const isAdmin = require('./middleware/isAdmin');
 const productRoutes = require('./routes/product');
 app.use('/api/products', productRoutes); // We'll update product.js to use middleware
 
+// Cart routes (require auth)
+const cartRoutes = require('./routes/cart');
+app.use('/api/cart', cartRoutes);
+
 // Admin routes (protected)
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', auth, isAdmin, adminRoutes);

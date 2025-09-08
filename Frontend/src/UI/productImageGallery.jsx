@@ -35,25 +35,29 @@ const ProductImageGallery = ({ imagesProp }) => {
   return (
     <section className="bg-white py-6">
       <div className="container mx-auto">
-        <div className="mb-2 overflow-hidden rounded-xl w-[320px] sm:w-[520px] h-[240px] sm:h-[360px]">
+        <div className="mb-2 overflow-hidden rounded-xl shadow-sm w-[320px] sm:w-[520px] h-[240px] sm:h-[360px] mx-auto">
           <img
             src={imgs[activeIndex]}
             alt={`gallery image ${activeIndex + 1}`}
             className="w-full h-full object-cover object-center"
           />
         </div>
-
-        <div className="flex gap-2">
+  <div className="mt-3 w-[320px] sm:w-[520px] mx-auto flex gap-3">
           {imgs.map((src, idx) => (
-            <button
+            <div
               key={idx}
               onClick={() => setActiveIndex(idx)}
-              className={`overflow-hidden rounded-lg border ${
-                activeIndex === idx ? 'border-black' : 'border-transparent'
-              } w-[60px] sm:w-[100px] h-[50px] sm:h-[60px]`}
-            >
-              <img src={src} alt={`thumbnail-${idx + 1}`} className="w-full h-full object-cover" />
-            </button>
+              aria-label={`show image ${idx + 1}`}
+              className={`m-0 overflow-hidden rounded-lg transition-shadow duration-150 flex-1 bg-transparent border-0 appearance-none outline-none focus:outline-none leading-none select-none min-w-0 min-h-0 cursor-pointer ${
+                activeIndex === idx ? 'ring-2 ring-[#8B4513]' : 'ring-0'
+              } h-[50px] sm:h-[60px]`}>
+              <div
+                role="img"
+                aria-label={`thumbnail-${idx + 1}`}
+                className="w-full h-full bg-center bg-cover block filter hover:brightness-80 transition duration-150"
+                style={{ backgroundImage: `url(${src})` }}
+              />
+            </div>
           ))}
         </div>
       </div>
