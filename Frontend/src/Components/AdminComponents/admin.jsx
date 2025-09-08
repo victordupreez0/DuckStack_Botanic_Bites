@@ -3,6 +3,7 @@ import React from "react";
 import Sidebar from "./sidebar";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Dashboard from "./dashboard";
+import { FiExternalLink } from "react-icons/fi";
 import History from "./history";
 import AddProductButton from "./AddProductButton";
 import AddStockButton from "./AddStockButton";
@@ -115,10 +116,12 @@ const ProductsPage = () => {
         try { window.dispatchEvent(new CustomEvent('admin:bundleAdded')); } catch(e){}
       }} />
       <button
-        className="btn bg-black text-white m-2"
+        className="btn bg-gray-200 text-black m-2 flex items-center gap-2"
         onClick={() => navigate('history')}
+        aria-label="History (view history in a new section)"
       >
-        History
+        <span>History</span>
+        <FiExternalLink className="w-4 h-4" aria-hidden="true" />
       </button>
       </div>
       <div className="mt-8">

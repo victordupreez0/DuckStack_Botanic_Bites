@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaTrash, FaStar } from "react-icons/fa";
 
 const EditProductForm = ({ product, onSaved, onCancel }) => {
   const [form, setForm] = useState({
@@ -197,8 +198,12 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
             <div key={i} className="relative w-full aspect-square overflow-hidden rounded bg-gray-100">
               <img src={src.startsWith('/') ? `http://localhost:3000${src}` : src} alt={product.name} className="w-full h-full object-cover" />
               <div className="absolute top-1 right-1 flex flex-col gap-1">
-                <button type="button" onClick={() => removeExistingImage(i)} className="bg-white/90 text-black rounded px-1 py-0.5 text-[9px] border">Remove</button>
-                <button type="button" onClick={() => setExistingAsMain(i)} className={`bg-white/90 text-black rounded px-1 py-0.5 text-[9px] border ${mainRef && mainRef.type==='existing' && mainRef.index===i ? 'font-semibold' : ''}`}>Main</button>
+                <button type="button" onClick={() => removeExistingImage(i)} className="bg-black/90 text-white rounded px-1 py-0.5 text-[9px] border flex items-center justify-center">
+                  <FaTrash size={12} />
+                </button>
+                <button type="button" onClick={() => setExistingAsMain(i)} className={`bg-black/90 text-white rounded px-1 py-0.5 text-[9px] border flex items-center justify-center ${mainRef && mainRef.type==='existing' && mainRef.index===i ? 'font-semibold' : ''}`}>
+                  <FaStar size={12} />
+                </button>
               </div>
               {mainRef && mainRef.type === 'existing' && mainRef.index === i && (
                 <div className="absolute bottom-1 left-1 bg-black text-white text-[11px] px-1 rounded">Primary</div>
@@ -225,14 +230,14 @@ const EditProductForm = ({ product, onSaved, onCancel }) => {
       )}
 
       <div className="flex items-center gap-4 m-2">
-        <label className="flex items-center gap-2 text-black"><input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} /> Featured</label>
-        <label className="flex items-center gap-2 text-black"><input type="checkbox" checked={specialDeal} onChange={(e) => setSpecialDeal(e.target.checked)} /> Special Deal</label>
-        <label className="flex items-center gap-2 text-black"><input type="checkbox" checked={hidden} onChange={(e) => setHidden(e.target.checked)} /> Hide from store</label>
+        <label className="flex items-center gap-2 text-black bg-gray-100 px-4 py-2 rounded-full"><input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} /> Featured</label>
+        <label className="flex items-center gap-2 text-black  bg-gray-100 px-4 py-2 rounded-full"><input type="checkbox" checked={specialDeal} onChange={(e) => setSpecialDeal(e.target.checked)} /> Special</label>
+        <label className="flex items-center gap-2 text-black  bg-gray-100 px-4 py-2 rounded-full"><input type="checkbox" checked={hidden} onChange={(e) => setHidden(e.target.checked)} /> Hide</label>
       </div>
 
       <div className="flex gap-2 m-2">
-        <button type="submit" disabled={loading} className="btn btn-xs bg-black text-white flex-1">{loading ? 'Saving...' : 'Save'}</button>
-        <button type="button" onClick={onCancel} className="btn btn-xs bg-gray-200 text-black flex-1">Cancel</button>
+        <button type="submit" disabled={loading} className="btn bg-black text-white w-4/5">{loading ? 'Saving...' : 'Save'}</button>
+        <button type="button" onClick={onCancel} className="btn bg-gray-200 text-black w-1/5 min-w-[70px]">Cancel</button>
       </div>
       {error && <div className="text-red-500 m-2">{error}</div>}
     </form>
