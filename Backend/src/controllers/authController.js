@@ -1,5 +1,5 @@
 const { getUserCollection } = require('../models/User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { OAuth2Client } = require('google-auth-library');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -13,7 +13,13 @@ exports.signup = async (req, res) => {
     const users = await getUserCollection();
     const existingUser = await users.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already in use' });
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // bcryptjs has a callback-based API; wrap in a Promise for await
+    const hashedPassword = await new Promise((resolve, reject) => {
+      bcrypt.hash(password, 10, (err, hash) => {
+        if (err) return reject(err);
+        resolve(hash);
+      });
+    });
     const user = {
       name,
       surname,
@@ -37,7 +43,12 @@ exports.login = async (req, res) => {
     const users = await getUserCollection();
     const user = await users.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password, (err, same) => {
+        if (err) return reject(err);
+        resolve(same);
+      });
+    });
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
     const jwt = require('jsonwebtoken');
     const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
