@@ -78,7 +78,12 @@ const FeaturedProducts = () => {
 								<div className="bg-white p-6">
 									<h3 className="text-sm text-gray-500">{dealProduct.species}</h3>
 									<h2 className="text-3xl font-bold text-black my-2">{dealProduct.title}</h2>
-									<p className="text-gray-700 mb-4">{dealProduct.description}</p>
+									<p className="text-gray-700 mb-4">{(function(text){
+										if(!text) return '';
+										const words = String(text).split(/\s+/).filter(Boolean);
+										if(words.length <= 30) return words.join(' ');
+										return words.slice(0,30).join(' ') + '...';
+									})(dealProduct.description)}</p>
 									<div className="flex items-center justify-between">
 										<div>
 											<span className="text-2xl font-extrabold">{dealProduct.price}</span>

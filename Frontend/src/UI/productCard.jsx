@@ -17,6 +17,12 @@ const ProductCard = ({ title, image, images, description, price, stock }) => {
     // other relative paths - try prefixing as fallback
     return s;
   };
+  const truncateWords = (text, wordLimit = 30) => {
+    if (!text) return '';
+    const words = String(text).split(/\s+/).filter(Boolean);
+    if (words.length <= wordLimit) return words.join(' ');
+    return words.slice(0, wordLimit).join(' ') + '...';
+  };
   return (
     <div className="card rounded-lg w-96 shadow-sm">
       <figure>
@@ -27,7 +33,7 @@ const ProductCard = ({ title, image, images, description, price, stock }) => {
       </figure>
       <div className="card-body rounded-bl-xlrounded-br-xl text-black">
         <h2 className="card-title ">{title}</h2>
-        <p className="text-left">{description}</p>
+  <p className="text-left">{truncateWords(description, 30)}</p>
         {typeof stock === 'number' && stock > 0 && (
           <span className="text-green-600 font-semibold">In Stock</span>
         )}

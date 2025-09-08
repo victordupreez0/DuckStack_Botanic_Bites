@@ -85,7 +85,11 @@ exports.addProduct = async (req, res) => {
       description: req.body.description,
       images,
       category: req.body.category,
-      stock: 0
+  stock: 0,
+  // optional admin flags
+  featured: req.body.featured === 'true' || req.body.featured === true || false,
+  specialDeal: req.body.specialDeal === 'true' || req.body.specialDeal === true || false,
+  hidden: req.body.hidden === 'true' || req.body.hidden === true || false
     };
     console.log('Parsed product for DB:', product, 'stock type:', typeof product.stock);
     const result = await collection.insertOne(product);
@@ -101,7 +105,8 @@ exports.getProducts = async (req, res) => {
     const collection = await getCollection();
   // If ?showAll=true is provided, return all products (for admin UI)
   const showAll = String(req.query.showAll || '').toLowerCase() === 'true';
-  const filter = showAll ? {} : { stock: { $gt: 0 } };
+  // when not showing all, return only in-stock products that are not hidden
+  const filter = showAll ? {} : { stock: { $gt: 0 }, hidden: { $ne: true } };
   const products = await collection.find(filter).toArray();
   res.json(products);
   } catch (err) {
@@ -137,8 +142,16 @@ exports.updateProduct = async (req, res) => {
     }
     if (req.body.category !== undefined) update.category = req.body.category;
     if (req.body.stock !== undefined) update.stock = Number(req.body.stock);
-    console.log('UpdateProduct called with id:', id);
-    const queryId = ObjectId.isValid(id) ? new ObjectId(id) : id;
+    // allow updating admin flags
+    if (req.body.featured !== undefined) update.featured = req.body.featured === 'true' || req.body.featured === true;
+    if (req.body.specialDeal !== undefined) update.specialDeal = req.body.specialDeal === 'true' || req.body.specialDeal === true;
+    if (req.body.hidden !== undefined) update.hidden = req.body.hidden === 'true' || req.body.hidden === true;
+    console.log('UpdateProduct called with id:', id, 'update payload keys:', Object.keys(req.body));
+    if (!ObjectId.isValid(id)) {
+      console.warn('Invalid product id for update:', id);
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+    const queryId = new ObjectId(id);
     const result = await collection.findOneAndUpdate(
       { _id: queryId },
       { $set: update },

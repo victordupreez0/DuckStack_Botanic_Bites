@@ -13,6 +13,12 @@ const ShopProductCard = ({ species, title, image, images, description, price, st
     if (s.startsWith('uploads/')) return `http://localhost:3000/${s}`;
     return s;
   };
+  const truncateWords = (text, wordLimit = 30) => {
+    if (!text) return '';
+    const words = String(text).split(/\s+/).filter(Boolean);
+    if (words.length <= wordLimit) return words.join(' ');
+    return words.slice(0, wordLimit).join(' ') + '...';
+  };
   return (
     <div
       className="w-full max-w-sm overflow-hidden cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-200"
@@ -24,7 +30,7 @@ const ShopProductCard = ({ species, title, image, images, description, price, st
       </div>
       <div className="py-4 text-left ml-5">
         <h2 className="text-lg font-semibold text-gray-800 text-black">{title}</h2>
-        <p className="py-2 text-gray-700 dark:text-gray-400">{description}</p>
+  <p className="py-2 text-gray-700 dark:text-gray-400">{truncateWords(description, 30)}</p>
         <h2 className="text-xl font-bold text-black">{price}</h2>
         <h2 className="text-sm text-black">{stock}</h2>
       </div>

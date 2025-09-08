@@ -1,13 +1,23 @@
 
 import React, { useState } from 'react';
+import EditProductForm from './EditProductForm';
 
 const ProductsTable = ({ products, onDelete }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
 
   const handleDeleteClick = (product) => {
     setSelectedProduct(product);
     setModalOpen(true);
+  };
+
+  const handleEditClick = (product) => {
+  // ensure _id is a string
+  const normalized = { ...product };
+  if (normalized._id && typeof normalized._id === 'object') normalized._id = (normalized._id.$oid || (normalized._id.toString ? normalized._id.toString() : String(normalized._id)));
+  setSelectedProduct(normalized);
+    setEditOpen(true);
   };
 
   const confirmDelete = async () => {
@@ -69,7 +79,7 @@ const ProductsTable = ({ products, onDelete }) => {
                   </button>
                   <button
                     className="btn btn-base btn-xs m-2 text-white"
-                    onClick={() => handleDeleteClick(product)}
+                    onClick={() => handleEditClick(product)}
                     data-id={product._id}
                   >
                     Edit
@@ -88,7 +98,7 @@ const ProductsTable = ({ products, onDelete }) => {
       {/* DaisyUI Modal */}
       {modalOpen && (
         <dialog id="delete_modal" className="modal modal-open">
-          <div className="modal-box bg-white text-black border border-gray-200">
+          <div className="modal-box bg-white text-black border border-gray-200 max-h-[60vh] overflow-y-auto">
             <h3 className="font-bold text-lg">Are you sure?</h3>
             <p className="py-4">Do you really want to delete <span className="font-semibold">{selectedProduct?.name}</span>?</p>
             <div className="modal-action">
@@ -97,6 +107,28 @@ const ProductsTable = ({ products, onDelete }) => {
             </div>
           </div>
         </dialog>
+      )}
+
+      {/* Edit modal */}
+      {editOpen && selectedProduct && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg max-w-lg w-full relative max-h-[80vh] overflow-y-auto">
+            <button
+              className="absolute top-2 right-3 text-2xl w-20 font-bold text-gray-500 hover:text-gray-800"
+              onClick={() => { setEditOpen(false); setSelectedProduct(null); }}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <EditProductForm product={selectedProduct} onSaved={async (updated) => {
+              // refresh by triggering parent fetch via custom event: the parent admin passes a refresh function through data attribute
+              const ev = new CustomEvent('admin:productUpdated', { detail: updated });
+              window.dispatchEvent(ev);
+              setEditOpen(false);
+              setSelectedProduct(null);
+            }} onCancel={() => { setEditOpen(false); setSelectedProduct(null); }} />
+          </div>
+        </div>
       )}
     </div>
   );

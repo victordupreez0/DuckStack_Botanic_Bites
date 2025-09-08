@@ -21,6 +21,8 @@ router.post('/', auth, isAdmin, upload.array('images', 4), productController.add
 router.get('/', productController.getProducts);
 router.delete('/:id', auth, isAdmin, productController.deleteProduct);
 router.put('/:id', auth, isAdmin, upload.array('images', 4), productController.updateProduct);
+// Accept PATCH as well for partial updates from frontend
+router.patch('/:id', auth, isAdmin, upload.array('images', 4), productController.updateProduct);
 // Stocktake endpoint for admins
 
 module.exports = router;

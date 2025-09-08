@@ -18,10 +18,20 @@ const ProductsPage = () => {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
       const data = await res.json();
-      setProducts(data);
+      // normalize _id to string for frontend usage (avoid [object Object])
+      const normalized = Array.isArray(data) ? data.map(p => ({
+        ...p,
+        _id: p && p._id && typeof p._id === 'object' ? (p._id.$oid || (p._id.toString ? p._id.toString() : String(p._id))) : p._id
+      })) : data;
+      setProducts(normalized);
     } catch (err) {}
   };
   React.useEffect(() => { fetchProducts(); }, []);
+  React.useEffect(() => {
+    const handler = () => { fetchProducts(); };
+    window.addEventListener('admin:productUpdated', handler);
+    return () => window.removeEventListener('admin:productUpdated', handler);
+  }, []);
   const handleProductAdded = async (product) => {
     // After adding, refresh product list from backend to get correct _id
     await fetchProducts();
